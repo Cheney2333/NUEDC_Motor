@@ -6,6 +6,8 @@
 "encoder\usart.o"
 "encoder\stm32f1xx_it.o"
 "encoder\stm32f1xx_hal_msp.o"
+"encoder\pid.o"
+"encoder\motor.o"
 "encoder\stm32f1xx_hal_gpio_ex.o"
 "encoder\stm32f1xx_hal_tim.o"
 "encoder\stm32f1xx_hal_tim_ex.o"

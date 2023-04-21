@@ -33,3 +33,4 @@ encoder\main.o: ../Core/Inc/usart.h
 encoder\main.o: ../Core/Inc/gpio.h
 encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 encoder\main.o: ../Core/Inc/motor.h
+encoder\main.o: ../Core/Inc/pid.h

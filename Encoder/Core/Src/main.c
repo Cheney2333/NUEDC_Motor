@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "motor.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,59 +49,9 @@
 /* USER CODE BEGIN PV */
 short encoderPulse[2]={0};
 float targetVelocity = 0.9; //目标速度
-typedef struct
-{
-	//相关速度PID参数
-	float Kp;
-	float Ki;
-	float Kd;
-	float Ur;				//限幅值
-	
-  int EN;                 //PID使能
-	float Un;					//期望输出值
-	float En_1;				//上一次的误差值
-	float En_2;				//上上次的误差值
-	int PWM;				//输出PWM值
-}PID_InitDefStruct;
 
-void PID_Init(PID_InitDefStruct* p) //PID值初始化
-{
-	p->Kp = 30.0;
-	p->Ki = 6.25;
-	p->Kd = 6.0;
-	p->Ur = 2000;
-	p->EN = 1;
-	p->Un = 100;
-	p->En_1 = 0;
-	p->En_2 = 0;
-	p->PWM = 0;
-}
-
-void Velocity_PID(float targetVelocity,float currentVelocity,PID_InitDefStruct* p)
-{
-	if(p->EN == 1)
-	{
-		float En = targetVelocity - currentVelocity;//误差值                                                     
-	
-		p->Un += p->Kp*(En - p->En_1) + p->Ki*En + p->Kd*(En - 2*p->En_1 + p->En_2); //增量式PID
-		
-		p->En_2 = p->En_1;
-		p->En_1 = En;
-		
-		p->PWM = (int)p->Un;
-		
-		/*输出限幅*/
-		if(p->PWM > p->Ur) p->PWM = p->Ur;
-		if(p->PWM < -p->Ur) p->PWM = -p->Ur;
-	}
-	else
-	{
-		PID_Init(p);
-	}
-}
-PID_InitDefStruct leftMotor_PID;
-PID_InitDefStruct rightMotor_PID;
-
+PID_InitDefStruct leftMotor_PID;    //创建左轮PID
+PID_InitDefStruct rightMotor_PID;   //创建右轮PID
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,73 +62,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-/**
-*    @brief 控制电机进行正转、反转和停转
-*    @param None
-*    @retval None
-*/
-void LeftMotor_Go() 	//左电机正转 LIN1=1 LIN2=0 即PB0高电平PB1低电平
-{
-  HAL_GPIO_WritePin(LIN_Port, LIN1, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(LIN_Port, LIN2, GPIO_PIN_RESET);
-}
-void LeftMotor_Back() //左电机反转 LIN1=0 LIN2=1 即PB0低电平 PB1高电平
-{
-  HAL_GPIO_WritePin(LIN_Port, LIN1, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(LIN_Port, LIN2, GPIO_PIN_SET);
-}
-void LeftMotor_Stop() //左电机停转 LIN1和LIN2电平相同
-{
-  HAL_GPIO_WritePin(LIN_Port, LIN1, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(LIN_Port, LIN2, GPIO_PIN_SET);
-}
-//-------------------------------------------------
-void RightMotor_Go() 	//右电机正转 RIN1=0 RIN2=1 即PA6低电平 PA7高电平
-{
-  HAL_GPIO_WritePin(RIN_Port, RIN1, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(RIN_Port, RIN2, GPIO_PIN_SET);
-}
-void RightMotor_Back() //右电机反转 RIN1=1 RIN2=0 即PA6高电平 PA7低电平
-{
-  HAL_GPIO_WritePin(RIN_Port, RIN1, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(RIN_Port, RIN2, GPIO_PIN_RESET);
-}
-void RightMotor_Stop() //右电机停转 RIN1和RIN2电平相同
-{
-  HAL_GPIO_WritePin(RIN_Port, RIN1, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(RIN_Port, RIN2, GPIO_PIN_SET);
-}
 
-/**
-*    @brief 控制电机进行速度控制
-*    @param 运动方向，左右电机的PWM值
-*    @retval None
-*/
-void MotorControl(char motorDirection, int leftMotorPWM, int rightMotorPWM)
-{
-  switch (motorDirection)
-  {
-  case 0:   //前行
-    LeftMotor_Go();
-    RightMotor_Go();
-    __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
-    __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
-    break;
-  case 1:   //后退
-    LeftMotor_Back();
-    RightMotor_Back();
-    __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
-    __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
-    break;
-  case 2:   //停车
-    LeftMotor_Stop();
-    RightMotor_Stop();
-    __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, 0);
-    __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, 0);
-    break;
-  default: break;
-  }
-}
 /* USER CODE END 0 */
 
 /**
@@ -311,6 +196,7 @@ int fputc(int ch, FILE *f)
 //编码器测速-------------------------------------------------------------
 /**
   * @brief  读取定时器2和定时器3的计数值(编码器脉冲值),TIM3对应右轮，TIM对应左轮
+  * @param  None
   * @retval None
   */
 void GetEncoderPulse()
@@ -322,14 +208,6 @@ void GetEncoderPulse()
   __HAL_TIM_GET_COUNTER(&htim4) = 0;  
 }
 
-/**
-  * @brief  根据得到的编码器脉冲值计算速度 单位:m/s
-  * @retval 速度值
-  */
-float CalActualSpeed(int pulse)
-{
-    return (float)(0.003925 * pulse);
-}
 //中断处理函数
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  //定时器2中断回调函数，每50ms调用一次
 {

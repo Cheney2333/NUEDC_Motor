@@ -3,7 +3,7 @@
 <title>Static Call Graph - [Encoder\Encoder.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Encoder\Encoder.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Fri Apr 21 11:46:23 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Fri Apr 21 14:56:35 2023
 <BR><P>
 <H3>Maximum Stack Usage =        160 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -282,8 +282,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_round
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
-<LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
+<BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Velocity_PID
 </UL>
 
@@ -384,8 +384,8 @@ Global Symbols
 <P><STRONG><a name="[b9]"></a>__I$use$fp</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, iusefp.o(.text), UNUSED)
 
 <P><STRONG><a name="[40]"></a>_float_round</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, fepilogue.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
-<LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
+<BR><BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 </UL>
 
 <P><STRONG><a name="[3f]"></a>_float_epilogue</STRONG> (Thumb, 92 bytes, Stack size 4 bytes, fepilogue.o(.text))
@@ -481,7 +481,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[53]"></a>CalActualSpeed</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.CalActualSpeed))
+<P><STRONG><a name="[53]"></a>CalActualSpeed</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, motor.o(i.CalActualSpeed))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = CalActualSpeed &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
@@ -516,13 +516,13 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[89]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RightMotor_Stop
+<BR><BR>[Called By]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RightMotor_Stop
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RightMotor_Go
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RightMotor_Back
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LeftMotor_Stop
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LeftMotor_Go
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LeftMotor_Back
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
 <P><STRONG><a name="[5c]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f1xx_hal.o(i.HAL_GetTick))
@@ -776,8 +776,8 @@ Global Symbols
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Velocity_PID
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorControl
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetEncoderPulse
 <LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CalActualSpeed
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetEncoderPulse
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
@@ -820,7 +820,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[88]"></a>LeftMotor_Back</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.LeftMotor_Back))
+<P><STRONG><a name="[88]"></a>LeftMotor_Back</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor.o(i.LeftMotor_Back))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LeftMotor_Back
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -828,7 +828,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorControl
 </UL>
 
-<P><STRONG><a name="[8a]"></a>LeftMotor_Go</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.LeftMotor_Go))
+<P><STRONG><a name="[8a]"></a>LeftMotor_Go</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor.o(i.LeftMotor_Go))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LeftMotor_Go
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -836,7 +836,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorControl
 </UL>
 
-<P><STRONG><a name="[8b]"></a>LeftMotor_Stop</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.LeftMotor_Stop))
+<P><STRONG><a name="[8b]"></a>LeftMotor_Stop</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor.o(i.LeftMotor_Stop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LeftMotor_Stop
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -847,8 +847,8 @@ Global Symbols
 <P><STRONG><a name="[8c]"></a>MX_GPIO_Init</STRONG> (Thumb, 158 bytes, Stack size 48 bytes, gpio.o(i.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -918,7 +918,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[82]"></a>MotorControl</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, main.o(i.MotorControl))
+<P><STRONG><a name="[82]"></a>MotorControl</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, motor.o(i.MotorControl))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = MotorControl &rArr; RightMotor_Stop
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RightMotor_Stop
@@ -938,15 +938,15 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[9d]"></a>PID_Init</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.PID_Init))
-<BR><BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Velocity_PID
+<P><STRONG><a name="[9d]"></a>PID_Init</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, pid.o(i.PID_Init))
+<BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Velocity_PID
+<LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[8]"></a>PendSV_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f1xx_it.o(i.PendSV_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[98]"></a>RightMotor_Back</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.RightMotor_Back))
+<P><STRONG><a name="[98]"></a>RightMotor_Back</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor.o(i.RightMotor_Back))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RightMotor_Back
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -954,7 +954,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorControl
 </UL>
 
-<P><STRONG><a name="[97]"></a>RightMotor_Go</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.RightMotor_Go))
+<P><STRONG><a name="[97]"></a>RightMotor_Go</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor.o(i.RightMotor_Go))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RightMotor_Go
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -962,7 +962,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorControl
 </UL>
 
-<P><STRONG><a name="[96]"></a>RightMotor_Stop</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.RightMotor_Stop))
+<P><STRONG><a name="[96]"></a>RightMotor_Stop</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor.o(i.RightMotor_Stop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RightMotor_Stop
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1032,11 +1032,10 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xb.o(RESET)
 </UL>
-<P><STRONG><a name="[81]"></a>Velocity_PID</STRONG> (Thumb, 168 bytes, Stack size 24 bytes, main.o(i.Velocity_PID))
-<BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = Velocity_PID &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
+<P><STRONG><a name="[81]"></a>Velocity_PID</STRONG> (Thumb, 168 bytes, Stack size 24 bytes, pid.o(i.Velocity_PID))
+<BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = Velocity_PID &rArr; __aeabi_frsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
-<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
@@ -1044,6 +1043,7 @@ Global Symbols
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_scalbnf
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
@@ -1081,7 +1081,8 @@ Global Symbols
 <P><STRONG><a name="[35]"></a>main</STRONG> (Thumb, 154 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = main &rArr; MX_TIM1_Init &rArr; HAL_TIM_MspPostInit &rArr; HAL_GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART2_UART_Init
+<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Init
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART2_UART_Init
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM4_Init
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM3_Init
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM2_Init
@@ -1092,7 +1093,6 @@ Global Symbols
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL><P>
