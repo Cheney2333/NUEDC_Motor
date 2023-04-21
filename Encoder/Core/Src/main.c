@@ -218,7 +218,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  //定时器2中断�
     GetEncoderPulse(); 
     c_leftSpeed = CalActualSpeed(encoderPulse[1]);   //获得当前的速度值
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
-    printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
+    printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
     
     Velocity_PID(targetVelocity,c_leftSpeed,&leftMotor_PID); //左电机PID计算
     c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
@@ -227,8 +227,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  //定时器2中断�
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
   }
-
-  
 }
 /* USER CODE END 4 */
 
