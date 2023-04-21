@@ -160,6 +160,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>rightMotor_PID,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>targetVelocity</ItemText>
+        </Ww>
       </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>

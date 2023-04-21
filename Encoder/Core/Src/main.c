@@ -22,10 +22,9 @@
 #include "usart.h"
 #include "gpio.h"
 #include "stdio.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,18 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-//左轮
-#define LIN_Port GPIOB
-#define LIN1 GPIO_PIN_0
-#define LIN2 GPIO_PIN_1
-//右轮
-#define RIN_Port GPIOA
-#define RIN1 GPIO_PIN_6
-#define RIN2 GPIO_PIN_7
-//定时器以及通道
-#define motor_TIM &htim1
-#define rightMotorChannel TIM_CHANNEL_1
-#define leftMotorChannel TIM_CHANNEL_2
+
 
 /* USER CODE END PD */
 

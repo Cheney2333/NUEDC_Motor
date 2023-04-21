@@ -8,10 +8,10 @@
                 "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
                 "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
                 "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\Drivers\\CMSIS\\Include",
+                "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\Core\\Src",
                 "D:\\Program Files\\Keil_v5\\ARM\\ARMCC\\include",
                 "D:\\Program Files\\Keil_v5\\ARM\\ARMCC\\include\\rw",
                 "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\MDK-ARM",
-                "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\Core\\Src",
                 "d:\\OneDrive\\Univesity\\NUEDC\\MotorTest\\Encoder\\Drivers\\STM32F1xx_HAL_Driver\\Src"
             ],
             "defines": [
