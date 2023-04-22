@@ -48,7 +48,7 @@
 
 /* USER CODE BEGIN PV */
 short encoderPulse[2]={0};
-float targetVelocity = 0.9; //目标速度
+float targetVelocity = 0.5; //目标速度
 
 PID_InitDefStruct leftMotor_PID;    //创建左轮PID
 PID_InitDefStruct rightMotor_PID;   //创建右轮PID
@@ -83,9 +83,9 @@ int main(void)
   /* USER CODE BEGIN Init */
   PID_Init(&leftMotor_PID);
   PID_Init(&rightMotor_PID);
-	rightMotor_PID.Kp = 50;
-  rightMotor_PID.Ki = 30;
-	rightMotor_PID.Kd = 10;
+	rightMotor_PID.Kp = 600;
+  rightMotor_PID.Ki = 225;
+	rightMotor_PID.Kd = 150;
   
   /* USER CODE END Init */
 
@@ -195,7 +195,7 @@ int fputc(int ch, FILE *f)
 
 //编码器测速-------------------------------------------------------------
 /**
-  * @brief  读取定时器2和定时器3的计数值(编码器脉冲值),TIM3对应右轮，TIM对应左轮
+  * @brief  读取定时器2和定时器3的计数值(编码器脉冲值),TIM3对应右轮，TIM4对应左轮
   * @param  None
   * @retval None
   */
@@ -218,8 +218,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  //定时器2中断�
     GetEncoderPulse(); 
     c_leftSpeed = CalActualSpeed(encoderPulse[1]);   //获得当前的速度值
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
-    printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
-    
+    //printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
+    printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
+		
     Velocity_PID(targetVelocity,c_leftSpeed,&leftMotor_PID); //左电机PID计算
     c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID); //以左电机的速度为标准 右电机PID计算

@@ -106,7 +106,7 @@ int main(void)
   MX_TIM4_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Base_Start_IT(&htim2);      //�趨10ms�ж�
+	//HAL_TIM_Base_Start_IT(&htim2);      //�趨10ms�ж�
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);   //����TIM1_CH1 PWM -- ����
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);   //����TIM1_CH2 PWM -- ����
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);   //������������ʱ
@@ -126,7 +126,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   { 
-    // MotorControl(0,test,test);  //ֱ��
+    MotorControl(0,2000,2000);  //ֱ��
     // HAL_Delay(2000);
     // MotorControl(2,0,0);      //ֹͣ
     // HAL_Delay(2000);

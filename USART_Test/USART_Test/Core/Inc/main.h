@@ -21,6 +21,9 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
+#define u8 unsigned char
+#define u16 unsigned short int
+#define u32 unsigned int
 
 #ifdef __cplusplus
 extern "C" {
