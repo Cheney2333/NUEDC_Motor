@@ -86,7 +86,7 @@ int main(void)
 	rightMotor_PID.Kp = 600;
   rightMotor_PID.Ki = 200;
 	rightMotor_PID.Kd = 350;
-	rightMotor_PID.Un	= 700;
+	rightMotor_PID.Un	= 725;
   
   /* USER CODE END Init */
 
