@@ -24,23 +24,22 @@ extern "C" {
 /* USER CODE BEGIN Private defines */
 typedef struct
 {
-	//相关速度PID参数
 	float Kp;
 	float Ki;
 	float Kd;
-	float Ur;		//限幅值
+	float Ur;		  // limiting value
 
-  int EN;         //PID使能
-	float Un;	    //期望输出值
-	float En_1;		//上一次的误差值
-	float En_2;		//上上次的误差值
-	int PWM;		//输出PWM值
+  int EN;       // PID enable
+	float Un;	    // expected output value
+	float En_1;		// last error value
+	float En_2;		// last but one error value
+	int PWM;		  // outpur PWM value
 }PID_InitDefStruct;
 /* USER CODE END Private defines */
 
 /* USER CODE BEGIN Prototypes */
-void PID_Init(PID_InitDefStruct* p); //PID值初始化
-void Velocity_PID(float targetVelocity,float currentVelocity,PID_InitDefStruct* p); //计算PID速度
+void PID_Init(PID_InitDefStruct* p);  // PID  initialization
+void Velocity_PID(float targetVelocity,float currentVelocity,PID_InitDefStruct* p); // calculate PID value
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

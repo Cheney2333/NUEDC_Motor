@@ -31,6 +31,6 @@ encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 encoder\main.o: ../Core/Inc/tim.h
 encoder\main.o: ../Core/Inc/usart.h
 encoder\main.o: ../Core/Inc/gpio.h
-encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 encoder\main.o: ../Core/Inc/motor.h
 encoder\main.o: ../Core/Inc/pid.h
+encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

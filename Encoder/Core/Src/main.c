@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : 小车主控程序
+  * @brief          : Car main control program
   ******************************************************************************
   * @attention
   *
@@ -21,11 +21,12 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "stdio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "motor.h"
 #include "pid.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,10 +49,10 @@
 
 /* USER CODE BEGIN PV */
 short encoderPulse[2]={0};
-float targetVelocity = 0.5; //目标速度
+float targetVelocity = 0.5; // target speed
 
-PID_InitDefStruct leftMotor_PID;    //创建左轮PID
-PID_InitDefStruct rightMotor_PID;   //创建右轮PID
+PID_InitDefStruct leftMotor_PID;  
+PID_InitDefStruct rightMotor_PID;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,26 +106,27 @@ int main(void)
   MX_TIM4_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Base_Start_IT(&htim2);      //设定50ms中断
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);   //开启TIM1_CH1 PWM -- 右轮
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);   //开启TIM1_CH2 PWM -- 左轮
-  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);   //开启编码器定时
-  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);   //开启编码器定时
-	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_1);   //开启编码器定时
-  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_2);   //开启编码器定时
-	
-	__HAL_TIM_ENABLE_IT(&htim3,TIM_IT_UPDATE);      //开启编码器定时器更新中断，防溢出处理
-	__HAL_TIM_ENABLE_IT(&htim4,TIM_IT_UPDATE);      //开启编码器定时器更新中断，防溢出处理
+	HAL_TIM_Base_Start_IT(&htim2);      // set 50ms interrupt
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);   // set TIM1_CH1 PWM -- right wheel
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);   // set TIM1_CH2 PWM -- left wheel
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);   
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);   
+	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_1);   
+  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_2);   // start encoder timer
+
+	__HAL_TIM_ENABLE_IT(&htim3,TIM_IT_UPDATE);      
+	__HAL_TIM_ENABLE_IT(&htim4,TIM_IT_UPDATE);  // start encoder timer to update interrupts and prevent overflow processing
   
-  __HAL_TIM_SET_COUNTER(&htim3, 30000);           //将编码器定时器初始，设定为30000
-	__HAL_TIM_SET_COUNTER(&htim4, 30000);           //将编码器定时器初始，设定为30000
+  __HAL_TIM_SET_COUNTER(&htim3, 30000);
+	__HAL_TIM_SET_COUNTER(&htim4, 30000);   // initialize encoder timing and set it to 3000
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  { 
+  {
+    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     // MotorControl(0,900,900);  //直行
     // HAL_Delay(2000);
     // MotorControl(2,0,0);      //停止
@@ -186,7 +188,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-//printf重定向
+// printf redirect
 int fputc(int ch, FILE *f)
 {
  uint8_t temp[1] = {ch};
@@ -194,39 +196,39 @@ int fputc(int ch, FILE *f)
  return ch;
 }
 
-//编码器测速-------------------------------------------------------------
+// Encoder speed measurement -------------------------------------------------------------
 /**
-  * @brief  读取定时器2和定时器3的计数值(编码器脉冲值),TIM3对应右轮，TIM4对应左轮
+  * @brief  read the count value(encoder pulse value) of TIM2 and TIM3, TIM3 -- rightWheel, TIM4 -- leftWheel
   * @param  None
   * @retval None
   */
 void GetEncoderPulse()
 {    
-  encoderPulse[0] = -((short)__HAL_TIM_GET_COUNTER(&htim3)); //配合小车轮子运动方向，进行取反操作
+  encoderPulse[0] = -((short)__HAL_TIM_GET_COUNTER(&htim3));
   encoderPulse[1] = -((short)__HAL_TIM_GET_COUNTER(&htim4));
 
-  __HAL_TIM_GET_COUNTER(&htim3) = 0;   //计数值重新清零
-  __HAL_TIM_GET_COUNTER(&htim4) = 0;  
+  __HAL_TIM_GET_COUNTER(&htim3) = 0;   
+  __HAL_TIM_GET_COUNTER(&htim4) = 0;  // reset pulse count value
 }
 
-//中断处理函数
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  //定时器2中断回调函数，每50ms调用一次
+// interrupt handler
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   float c_leftSpeed, c_rightSpeed, c_leftSpeed_afterPID;
   
   if(htim->Instance == TIM2)
   {
     GetEncoderPulse(); 
-    c_leftSpeed = CalActualSpeed(encoderPulse[1]);   //获得当前的速度值
+    c_leftSpeed = CalActualSpeed(encoderPulse[1]);   // calculate current speed
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
     //printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
     printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
 		
-    Velocity_PID(targetVelocity,c_leftSpeed,&leftMotor_PID); //左电机PID计算
+    Velocity_PID(targetVelocity,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
     c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
-    Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID); //以左电机的速度为标准 右电机PID计算
+    Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
 
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    //MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
   }
 }
