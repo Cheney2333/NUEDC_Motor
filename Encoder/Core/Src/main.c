@@ -27,6 +27,7 @@
 #include "motor.h"
 #include "pid.h"
 #include "stdio.h"
+#include "trail.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +51,7 @@
 /* USER CODE BEGIN PV */
 short encoderPulse[2]={0};
 float targetVelocity = 0.5; // target speed
+int out[] = {0,0,0,0,0};
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
@@ -89,6 +91,7 @@ int main(void)
 	rightMotor_PID.Kd = 350;
 	rightMotor_PID.Un	= 725;
   
+  
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -127,6 +130,17 @@ int main(void)
   while (1)
   {
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+
+		if(HAL_GPIO_ReadPin(L2_Port,L2_Pin) == GPIO_PIN_SET) out[0] = 1;
+    else out[0] = 0;
+		if(HAL_GPIO_ReadPin(L1_Port,L1_Pin) == GPIO_PIN_SET) out[1] = 1;
+    else out[1] = 0;
+		if(HAL_GPIO_ReadPin(center_Port,center_Pin) == GPIO_PIN_SET) out[2] = 1;
+    else out[2] = 0;
+		if(HAL_GPIO_ReadPin(R1_Port,R1_Pin) == GPIO_PIN_SET) out[3] = 1;
+    else out[3] = 0;
+    if(HAL_GPIO_ReadPin(R2_Port,R2_Pin) == GPIO_PIN_SET) out[4] = 1;
+    else out[4] = 0;
     // MotorControl(0,900,900);  //直行
     // HAL_Delay(2000);
     // MotorControl(2,0,0);      //停止

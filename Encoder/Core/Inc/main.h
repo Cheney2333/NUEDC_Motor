@@ -65,6 +65,16 @@ void Error_Handler(void);
 #define IN3_GPIO_Port GPIOB
 #define IN4_Pin GPIO_PIN_1
 #define IN4_GPIO_Port GPIOB
+#define OUT1_Pin GPIO_PIN_12
+#define OUT1_GPIO_Port GPIOB
+#define OUT2_Pin GPIO_PIN_13
+#define OUT2_GPIO_Port GPIOB
+#define OUT3_Pin GPIO_PIN_14
+#define OUT3_GPIO_Port GPIOB
+#define OUT4_Pin GPIO_PIN_15
+#define OUT4_GPIO_Port GPIOB
+#define OUT5_Pin GPIO_PIN_10
+#define OUT5_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
