@@ -50,8 +50,8 @@
 
 /* USER CODE BEGIN PV */
 short encoderPulse[2]={0};
-float targetVelocity = 0.5; // target speed
-int out[] = {0,0,0,0,0};
+float targetVelocity = 0.3; // target speed
+float leftPWM, rightPWM;
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
@@ -60,7 +60,7 @@ PID_InitDefStruct rightMotor_PID;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void trailModule(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -130,31 +130,9 @@ int main(void)
   while (1)
   {
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-
-		if(HAL_GPIO_ReadPin(L2_Port,L2_Pin) == GPIO_PIN_SET) out[0] = 1;
-    else out[0] = 0;
-		if(HAL_GPIO_ReadPin(L1_Port,L1_Pin) == GPIO_PIN_SET) out[1] = 1;
-    else out[1] = 0;
-		if(HAL_GPIO_ReadPin(center_Port,center_Pin) == GPIO_PIN_SET) out[2] = 1;
-    else out[2] = 0;
-		if(HAL_GPIO_ReadPin(R1_Port,R1_Pin) == GPIO_PIN_SET) out[3] = 1;
-    else out[3] = 0;
-    if(HAL_GPIO_ReadPin(R2_Port,R2_Pin) == GPIO_PIN_SET) out[4] = 1;
-    else out[4] = 0;
-    // MotorControl(0,900,900);  //直行
-    // HAL_Delay(2000);
-    // MotorControl(2,0,0);      //停止
-    // HAL_Delay(2000);
-    // MotorControl(1,5000,5000);  //后退
-    // HAL_Delay(2000);
-    // MotorControl(0,0,2000);    //前进左转
-    // HAL_Delay(2000);
-    // MotorControl(0,2000,0);    //前进右转
-    // HAL_Delay(2000);
-    // MotorControl(1,0,2000);    //左转退回
-    // HAL_Delay(2000);
-    // MotorControl(1,2000,0);    //右转退回
-    // HAL_Delay(2000);
+    
+		
+    //trailModule();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -242,8 +220,39 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
 
-    //MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
+    trailModule();
+  }
+}
+// trail module
+void trailModule()
+{
+  if(L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET){
+    MotorControl(2,0,0);
+
+    MotorControl(0,650,700);
+    HAL_Delay(1500);
+  }
+  // else if(HAL_GPIO_ReadPin(L1_Port,L1_Pin)==GPIO_PIN_RESET){
+  //     MotorControl(0,600,700);
+  //     HAL_Delay(2000);
+  // }
+  else if(L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET){
+      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+  }
+  // else if(HAL_GPIO_ReadPin(R1_Port,R1_Pin)==GPIO_PIN_RESET){
+  //     MotorControl(0,700,600);
+  //     HAL_Delay(2000);
+  // }
+  else if(L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET){
+		MotorControl(2,0,0);
+
+    MotorControl(0,700,650);
+    HAL_Delay(1500);
+  }
+  else{
+      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
 }
 /* USER CODE END 4 */

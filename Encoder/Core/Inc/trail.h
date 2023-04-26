@@ -14,6 +14,7 @@
 #define __TRAIL_H__
 
 #include "main.h"
+#include "motor.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,7 +31,13 @@ extern "C" {
 #define R2_Pin GPIO_PIN_10
 #define R2_Port GPIOA
 
-void testModule( void );
+#define L2 HAL_GPIO_ReadPin(L2_Port,L2_Pin)
+#define L1 HAL_GPIO_ReadPin(L1_Port,L1_Pin)
+#define center HAL_GPIO_ReadPin(center_Port,center_Pin)
+#define R1 HAL_GPIO_ReadPin(R1_Port,R1_Pin)
+#define R2 HAL_GPIO_ReadPin(R2_Port,R2_Pin)
+
+void testModule(void);
 
 #ifdef __cplusplus
 }

@@ -38,7 +38,7 @@ void Velocity_PID(float targetVelocity, float currentVelocity, PID_InitDefStruct
 		
 		/* 输出限幅 */
 		if(p->PWM > p->Ur) p->PWM = p->Ur;
-		if(p->PWM < -p->Ur) p->PWM = -p->Ur;
+		if(p->PWM < 600) p->PWM = 600;
 	}
 	else PID_Init(p);
 }
