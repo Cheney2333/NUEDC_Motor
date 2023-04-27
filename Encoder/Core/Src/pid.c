@@ -7,12 +7,12 @@
 */
 void PID_Init(PID_InitDefStruct* p) //PID值初始化
 {
-	p->Kp = 15;
-	p->Ki = 0.75;
-	p->Kd = 0.5;
-	p->Ur = 2000;
+	p->Kp = 0.3;
+	p->Ki = 0.4;
+	p->Kd = 0;
+	p->Ur = 1500;
 	p->EN = 1;
-	p->Un = 665;
+	p->Un = 650;
 	p->En_1 = 0;
 	p->En_2 = 0;
 	p->PWM = 0;
@@ -38,7 +38,7 @@ void Velocity_PID(float targetVelocity, float currentVelocity, PID_InitDefStruct
 		
 		/* 输出限幅 */
 		if(p->PWM > p->Ur) p->PWM = p->Ur;
-		if(p->PWM < 600) p->PWM = 600;
+		if(p->PWM < 0) p->PWM = 0;
 	}
 	else PID_Init(p);
 }
