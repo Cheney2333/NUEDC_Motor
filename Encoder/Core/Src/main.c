@@ -87,9 +87,9 @@ int main(void)
   PID_Init(&leftMotor_PID);
   PID_Init(&rightMotor_PID);
 	rightMotor_PID.Kp = 600;
-  rightMotor_PID.Ki = 175;
-	rightMotor_PID.Kd = 220;
-	rightMotor_PID.Un	= 640;
+  rightMotor_PID.Ki = 150;
+	rightMotor_PID.Kd = 20;
+	rightMotor_PID.Un	= 670;
   
   
   /* USER CODE END Init */
@@ -129,10 +129,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     
-    
-		
-    //trailModule();
+    trailModule();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -220,7 +219,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
 
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
     //trailModule();
   }
@@ -228,9 +227,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 // trail module
 void trailModule()
 {
-  if(L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET){
+  if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){
     MotorControl(2,0,0);
-    while(L1==GPIO_PIN_RESET) { MotorControl(0,690,800); }
+    while(L1==GPIO_PIN_RESET) { MotorControl(0,0,700); }
   }
   // else if(HAL_GPIO_ReadPin(L1_Port,L1_Pin)==GPIO_PIN_RESET){
   //     MotorControl(0,600,700);
@@ -245,7 +244,7 @@ void trailModule()
   // }
   else if(L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET){
 		MotorControl(2,0,0);
-    while(R1==GPIO_PIN_RESET) { MotorControl(0,800,690); }    
+    while(R1==GPIO_PIN_RESET) { MotorControl(0,700,0); }    
   }
   else{
       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
