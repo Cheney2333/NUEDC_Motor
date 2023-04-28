@@ -131,9 +131,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     
-    // trailModule();
+    trailModule();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -232,11 +232,16 @@ void trailModule()
   if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
     //MotorControl(2,0,0);
     while(L1==GPIO_PIN_RESET) { 
-      MotorControl(0,0,690); }
-    recoverSpeed();
+      rightMotor_PID.targetSpeed = 0.2;
+      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    }
+    // recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
-    while(center==GPIO_PIN_RESET) { MotorControl(0,0,680); }
+    while(center==GPIO_PIN_RESET) {
+      leftMotor_PID.targetSpeed = 0.25;
+      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    }
     // while(center==GPIO_PIN_RESET) { MotorControl(0,680,) }
     recoverSpeed();
   }
@@ -244,14 +249,21 @@ void trailModule()
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
-    while(center==GPIO_PIN_RESET) { MotorControl(0,680,0); }
+    while(center==GPIO_PIN_RESET) {
+      rightMotor_PID.targetSpeed = 0.25;
+      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    }
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
-		while(R1==GPIO_PIN_RESET) { MotorControl(0,690,640); }
-    recoverSpeed();
+		while(R1==GPIO_PIN_RESET) {
+      rightMotor_PID.targetSpeed = 0.20;
+      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    }
+    // recoverSpeed();
   }
   else{
+    recoverSpeed();
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
 }
