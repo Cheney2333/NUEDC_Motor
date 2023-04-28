@@ -228,24 +228,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 // trail module
 void trailModule()
 {
-  if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){   // L2
+  if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
     //MotorControl(2,0,0);
-    while(L2==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,0,720); }
+    while(L1==GPIO_PIN_RESET) { MotorControl(0,0,690); }
     recoverSpeed();
   }
-  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){    // L1
-    while(L1==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,0,690); }
+  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
+    while(center==GPIO_PIN_RESET) { MotorControl(0,0,680); }
+    // while(center==GPIO_PIN_RESET) { MotorControl(0,680,) }
     recoverSpeed();
   }
-  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){    // center
+  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
-  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R1
-    while(R1==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,690,0); }
+  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
+    while(center==GPIO_PIN_RESET) { MotorControl(0,680,0); }
     recoverSpeed();
   }
-  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R2
-		while(R2==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,720,0); }
+  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
+		while(R1==GPIO_PIN_RESET) { MotorControl(0,690,640); }
     recoverSpeed();
   }
   else{
