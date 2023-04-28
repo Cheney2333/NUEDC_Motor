@@ -105,10 +105,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM1_Init();
-  MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_USART2_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim2);      // set 50ms interrupt
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);   // set TIM1_CH1 PWM -- right wheel
@@ -217,9 +217,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
 		
     Velocity_PID(targetVelocity,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
+    // Velocity_PID(targetVelocity,c_rightSpeed,&rightMotor_PID);
     c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
-
     
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
     //trailModule();
@@ -245,7 +245,7 @@ void trailModule()
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R2
-		while(R2==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,720,600); }
+		while(R2==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,720,0); }
     recoverSpeed();
   }
   else{
