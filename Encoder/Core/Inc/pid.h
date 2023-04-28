@@ -29,8 +29,9 @@ typedef struct
 	float Ki;
 	float Kd;
 	float Ur;		//限幅值
+  float targetSpeed;
 
-    int EN;         //PID使能
+  int EN;         //PID使能
 	float Un;	    //期望输出值
 	float En_1;		//上一次的误差值
 	float En_2;		//上上次的误差值

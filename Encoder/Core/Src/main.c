@@ -50,11 +50,12 @@
 
 /* USER CODE BEGIN PV */
 short encoderPulse[2]={0};
-float targetVelocity = 0.3; // target speed
+// float targetVelocity = 0.3; // target speed
 float leftPWM, rightPWM;
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,10 +88,10 @@ int main(void)
   /* USER CODE BEGIN Init */
   PID_Init(&leftMotor_PID);
   PID_Init(&rightMotor_PID);
-	rightMotor_PID.Kp = 600;
-  rightMotor_PID.Ki = 150;
+
+	rightMotor_PID.Kp = 25;
+  rightMotor_PID.Ki = 50;
 	rightMotor_PID.Kd = 20;
-	rightMotor_PID.Un	= 670;
   
   
   /* USER CODE END Init */
@@ -130,9 +131,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     
-    trailModule();
+    // trailModule();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -206,7 +207,7 @@ void GetEncoderPulse()
 // interrupt handler
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  float c_leftSpeed, c_rightSpeed, c_leftSpeed_afterPID;
+  float c_leftSpeed, c_rightSpeed;
   
   if(htim->Instance == TIM2)
   {
@@ -216,10 +217,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     //printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
     printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
 		
-    Velocity_PID(targetVelocity,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
-    // Velocity_PID(targetVelocity,c_rightSpeed,&rightMotor_PID);
-    c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
-    Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
+    Velocity_PID(leftMotor_PID.targetSpeed,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
+    Velocity_PID(rightMotor_PID.targetSpeed,c_rightSpeed,&rightMotor_PID);
+    // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
+    // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
     
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
     //trailModule();
@@ -230,7 +231,8 @@ void trailModule()
 {
   if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
     //MotorControl(2,0,0);
-    while(L1==GPIO_PIN_RESET) { MotorControl(0,0,690); }
+    while(L1==GPIO_PIN_RESET) { 
+      MotorControl(0,0,690); }
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
@@ -254,8 +256,8 @@ void trailModule()
   }
 }
 void recoverSpeed() {
-  leftMotor_PID.Un = 680;
-  rightMotor_PID.Un = 680;
+  leftMotor_PID.targetSpeed = 0.3;
+  rightMotor_PID.targetSpeed = 0.3;
 }
 /* USER CODE END 4 */
 
