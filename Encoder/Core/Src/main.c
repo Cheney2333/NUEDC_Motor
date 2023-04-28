@@ -61,6 +61,7 @@ PID_InitDefStruct rightMotor_PID;
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void trailModule(void);
+void recoverSpeed(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -129,7 +130,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    //MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     
     trailModule();
     /* USER CODE END WHILE */
@@ -227,28 +228,33 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 // trail module
 void trailModule()
 {
-  if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){
-    MotorControl(2,0,0);
-    while(L1==GPIO_PIN_RESET) { MotorControl(0,0,700); }
+  if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){   // L2
+    //MotorControl(2,0,0);
+    while(L2==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,0,720); }
+    recoverSpeed();
   }
-  // else if(HAL_GPIO_ReadPin(L1_Port,L1_Pin)==GPIO_PIN_RESET){
-  //     MotorControl(0,600,700);
-  //     HAL_Delay(2000);
-  // }
-  // else if(L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET){
-  //     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  // }
-  // else if(HAL_GPIO_ReadPin(R1_Port,R1_Pin)==GPIO_PIN_RESET){
-  //     MotorControl(0,700,600);
-  //     HAL_Delay(2000);
-  // }
-  else if(L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET){
-		MotorControl(2,0,0);
-    while(R1==GPIO_PIN_RESET) { MotorControl(0,700,0); }    
+  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){    // L1
+    while(L1==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,0,690); }
+    recoverSpeed();
+  }
+  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_SET){    // center
+    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+  }
+  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R1
+    while(R1==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,690,0); }
+    recoverSpeed();
+  }
+  else if(L2==GPIO_PIN_SET && L1==GPIO_PIN_SET && center==GPIO_PIN_SET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R2
+		while(R2==GPIO_PIN_RESET && center==GPIO_PIN_SET) { MotorControl(0,720,600); }
+    recoverSpeed();
   }
   else{
-      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
+}
+void recoverSpeed() {
+  leftMotor_PID.Un = 680;
+  rightMotor_PID.Un = 680;
 }
 /* USER CODE END 4 */
 
