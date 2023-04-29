@@ -133,7 +133,9 @@ int main(void)
   while (1)
   {
     // MotorControl(0,testPWM,testPWM);
+		trailModule();
 		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    HAL_Delay(5);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -216,7 +218,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
     //printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
     printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
-		trailModule();
+		
     Velocity_PID(leftMotor_PID.targetSpeed,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
     Velocity_PID(rightMotor_PID.targetSpeed,c_rightSpeed,&rightMotor_PID);
     // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
@@ -231,16 +233,16 @@ void ControlCar(CarDirection direction)
 {
   switch (direction) {
     case LEFT:
-        leftMotor_PID.targetSpeed = 0;
+        leftMotor_PID.targetSpeed = 0; 
         break;
     case microLEFT:
-        leftMotor_PID.targetSpeed = 0.10;
+        leftMotor_PID.targetSpeed = 0.1;
         break;
     case microRIGHT:
-        rightMotor_PID.targetSpeed = 0.10;
+        rightMotor_PID.targetSpeed = 0.1;
         break;
     case RIGHT:
-        rightMotor_PID.targetSpeed = 0;
+        rightMotor_PID.targetSpeed = 0; 
         break;
     case FORWARD:
         leftMotor_PID.targetSpeed = 0.15;
