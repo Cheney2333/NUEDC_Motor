@@ -10,7 +10,7 @@ void PID_Init(PID_InitDefStruct* p) //PID值初始化
 	p->Kp = 25;
 	p->Ki = 50;
 	p->Kd = 20;
-	p->Ur = 690;
+	p->Ur = 700;
 	p->EN = 1;
 	p->Un = 600;
 	p->En_1 = 0;
