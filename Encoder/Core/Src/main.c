@@ -223,7 +223,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
     
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
-    //trailModule();
+    // trailModule();
   }
 }
 // trail module
@@ -231,22 +231,22 @@ void trailModule()
 {
   if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
     //MotorControl(2,0,0);
-    while(L1==GPIO_PIN_RESET) { 
-      rightMotor_PID.targetSpeed = 0.2;
+    while(center==GPIO_PIN_RESET) {
+      leftMotor_PID.targetSpeed = 0.20;
       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     }
-    // recoverSpeed();
+    recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
     while(center==GPIO_PIN_RESET) {
       leftMotor_PID.targetSpeed = 0.25;
       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     }
-    // while(center==GPIO_PIN_RESET) { MotorControl(0,680,) }
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+    recoverSpeed();
+		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
     while(center==GPIO_PIN_RESET) {
@@ -256,11 +256,11 @@ void trailModule()
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
-		while(R1==GPIO_PIN_RESET) {
+		while(center==GPIO_PIN_RESET) {
       rightMotor_PID.targetSpeed = 0.20;
       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     }
-    // recoverSpeed();
+    recoverSpeed();
   }
   else{
     recoverSpeed();
