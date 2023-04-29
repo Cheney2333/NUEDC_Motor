@@ -28,7 +28,7 @@ usart_test\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 usart_test\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 usart_test\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 usart_test\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
-usart_test\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 usart_test\main.o: ../Core/Inc/tim.h
 usart_test\main.o: ../Core/Inc/usart.h
 usart_test\main.o: ../Core/Inc/gpio.h
+usart_test\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
