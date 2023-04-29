@@ -42,25 +42,35 @@ void MotorControl(char motorDirection, int leftMotorPWM, int rightMotorPWM)
 {
   switch (motorDirection)
   {
-  case 0:   // forward
-    LeftMotor_Go();
-    RightMotor_Go();
-    __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
-    __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
-    break;
-  case 1:   // backward
-    LeftMotor_Back();
-    RightMotor_Back();
-    __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
-    __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
-    break;
-  case 2:   // stop
-    LeftMotor_Stop();
-    RightMotor_Stop();
-    __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, 0);
-    __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, 0);
-    break;
-  default: break;
+    case 0:   // forward
+      LeftMotor_Go();
+      RightMotor_Go();
+      __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
+      __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
+      break;
+    case 1:   // backward
+      LeftMotor_Back();
+      RightMotor_Back();
+      __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
+      __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
+      break;
+    case 2:   // stop
+      LeftMotor_Stop();
+      RightMotor_Stop();
+      __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, 0);
+      __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, 0);
+      break;
+    case 3:   // left
+      LeftMotor_Back();
+      RightMotor_Go();
+      __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
+      __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
+    case 4:   // right
+      LeftMotor_Go();
+      RightMotor_Back();
+      __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
+      __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
+    default: break;
   }
 }
 
