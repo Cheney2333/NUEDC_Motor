@@ -19,6 +19,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include "main.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */

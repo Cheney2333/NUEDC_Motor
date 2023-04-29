@@ -52,6 +52,7 @@
 short encoderPulse[2]={0};
 // float targetVelocity = 0.3; // target speed
 float leftPWM, rightPWM;
+// int testPWM = 2000;
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
@@ -89,9 +90,9 @@ int main(void)
   PID_Init(&leftMotor_PID);
   PID_Init(&rightMotor_PID);
 
-	rightMotor_PID.Kp = 25;
-  rightMotor_PID.Ki = 50;
-	rightMotor_PID.Kd = 20;
+	// rightMotor_PID.Kp = 25;
+  // rightMotor_PID.Ki = 50;
+	// rightMotor_PID.Kd = 20;
   
   
   /* USER CODE END Init */
@@ -131,9 +132,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-    
-    trailModule();
+    // MotorControl(0,testPWM,testPWM);
+		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -216,57 +216,85 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
     //printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
     printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
-		
+		trailModule();
     Velocity_PID(leftMotor_PID.targetSpeed,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
     Velocity_PID(rightMotor_PID.targetSpeed,c_rightSpeed,&rightMotor_PID);
     // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
     
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
-    // trailModule();
+    
   }
+}
+// 控制小车行驶方向
+void ControlCar(CarDirection direction)
+{
+  switch (direction) {
+    case LEFT:
+        leftMotor_PID.targetSpeed = 0;
+        break;
+    case microLEFT:
+        leftMotor_PID.targetSpeed = 0.10;
+        break;
+    case microRIGHT:
+        rightMotor_PID.targetSpeed = 0.10;
+        break;
+    case RIGHT:
+        rightMotor_PID.targetSpeed = 0;
+        break;
+    case FORWARD:
+        leftMotor_PID.targetSpeed = 0.15;
+        rightMotor_PID.targetSpeed = 0.15;
+        break;
+    default:
+        break;
+  }
+}
+void trailModule() {
+  CarDirection direction = GetCarDirection();
+  ControlCar(direction);
 }
 // trail module
-void trailModule()
-{
-  if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
-    //MotorControl(2,0,0);
-    while(center==GPIO_PIN_RESET) {
-      leftMotor_PID.targetSpeed = 0.20;
-      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-    }
-    recoverSpeed();
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
-    while(center==GPIO_PIN_RESET) {
-      leftMotor_PID.targetSpeed = 0.25;
-      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-    }
-    recoverSpeed();
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
-    recoverSpeed();
-		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
-    while(center==GPIO_PIN_RESET) {
-      rightMotor_PID.targetSpeed = 0.25;
-      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-    }
-    recoverSpeed();
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
-		while(center==GPIO_PIN_RESET) {
-      rightMotor_PID.targetSpeed = 0.20;
-      MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-    }
-    recoverSpeed();
-  }
-  else{
-    recoverSpeed();
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  }
-}
+// void trailModule()
+// {
+//   if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
+//     //MotorControl(2,0,0);
+//     while(center==GPIO_PIN_RESET) {
+//       leftMotor_PID.targetSpeed = 0.20;
+//       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//     }
+//     recoverSpeed();
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
+//     while(center==GPIO_PIN_RESET) {
+//       leftMotor_PID.targetSpeed = 0.25;
+//       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//     }
+//     recoverSpeed();
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
+//     recoverSpeed();
+// 		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
+//     while(center==GPIO_PIN_RESET) {
+//       rightMotor_PID.targetSpeed = 0.25;
+//       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//     }
+//     recoverSpeed();
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
+// 		while(center==GPIO_PIN_RESET) {
+//       rightMotor_PID.targetSpeed = 0.20;
+//       MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//     }
+//     recoverSpeed();
+//   }
+//   else{
+//     recoverSpeed();
+//     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//   }
+// }
 void recoverSpeed() {
   leftMotor_PID.targetSpeed = 0.3;
   rightMotor_PID.targetSpeed = 0.3;

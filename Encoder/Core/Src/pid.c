@@ -7,17 +7,17 @@
 */
 void PID_Init(PID_InitDefStruct* p) //PID值初始化
 {
-	p->Kp = 25;
-	p->Ki = 50;
-	p->Kd = 20;
-	p->Ur = 700;
+	p->Kp = 1650;
+	p->Ki = 230;
+	p->Kd = 0.5;
+	p->Ur = 1600;
 	p->EN = 1;
-	p->Un = 600;
+	p->Un = 1200;
 	p->En_1 = 0;
 	p->En_2 = 0;
 	p->PWM = 0;
-	p->targetSpeed = 0.3;
-	p->targetSpeed= 0.3;
+	p->targetSpeed = 0.15;
+	p->targetSpeed= 0.15;
 }
 
 /**
@@ -34,7 +34,7 @@ void Velocity_PID(float targetVelocity, float currentVelocity, PID_InitDefStruct
 		p->Un += p->Kp*(En - p->En_1) + p->Ki*En + p->Kd*(En - 2*p->En_1 + p->En_2); //增量式PID
 		
 		if(p->Un > p->Ur) p->Un = p->Ur;
-		if(p->Un < 0) p->Un = 0;
+		if(p->Un < 0) p->Un = 1200;
 		
 		p->En_2 = p->En_1;
 		p->En_1 = En;
