@@ -30,3 +30,5 @@ encoder\trail.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 encoder\trail.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 encoder\trail.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 encoder\trail.o: ../Core/Inc/motor.h
+encoder\trail.o: ../Core/Inc/pid.h
+encoder\trail.o: ../Core/Inc/pid.h

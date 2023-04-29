@@ -53,9 +53,13 @@ short encoderPulse[2]={0};
 // float targetVelocity = 0.3; // target speed
 float leftPWM, rightPWM;
 // int testPWM = 2000;
+int thisTrailStatus = 0;
+int lastTrailStatus = 0;
+int Trail_PID_PWM = 0;
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
+PID_Trail trail;
 
 /* USER CODE END PV */
 
@@ -89,6 +93,7 @@ int main(void)
   /* USER CODE BEGIN Init */
   PID_Init(&leftMotor_PID);
   PID_Init(&rightMotor_PID);
+	PID_Trail_Init(&trail);
 
 	// rightMotor_PID.Kp = 25;
   // rightMotor_PID.Ki = 50;
@@ -132,8 +137,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		trailModule();
-		// MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+		// trailModule();
+		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -223,79 +228,62 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
     
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
-    
+    // trailModule();
   }
 }
-// // 控制小车行驶方向
-// void ControlCar(CarDirection direction)
+// trail module
+// void trailModule()
 // {
-//   switch (direction) {
-//     case LEFT:
-//         leftMotor_PID.targetSpeed = 0; 
-//         break;
-//     case microLEFT:
-//         leftMotor_PID.targetSpeed = 0.12;
-//         break;
-//     case microRIGHT:
-//         rightMotor_PID.targetSpeed = 0.12;
-//         break;
-//     case RIGHT:
-//         rightMotor_PID.targetSpeed = 0; 
-//         break;
-//     case FORWARD:
-//         leftMotor_PID.targetSpeed = 0.2;
-//         rightMotor_PID.targetSpeed = 0.2;
-//         break;
-//     default:
-//         break;
+//   if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
+//     //MotorControl(2,0,0);
+//     while(L1==GPIO_PIN_RESET) {
+//       // leftMotor_PID.targetSpeed = 0.20;
+//       MotorControl(0,570,620);
+//     }
+//     recoverSpeed();
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
+//     while(center==GPIO_PIN_RESET) {
+//       // leftMotor_PID.targetSpeed = 0.25;
+//       MotorControl(0,590,620);
+//     }
+//     recoverSpeed();
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
+//     recoverSpeed();
+// 		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
+//     while(center==GPIO_PIN_RESET) {
+//       MotorControl(0,620,590);
+//     }
+//     recoverSpeed();
+//   }
+//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
+// 		while(R1==GPIO_PIN_RESET) {
+//       // rightMotor_PID.targetSpeed = 0.20;
+//       MotorControl(0,620,570);
+//     }
+//     recoverSpeed();
+//   }
+//   else{
+//     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
 //   }
 // }
-// void trailModule() {
-//   CarDirection direction = GetCarDirection();
-//   ControlCar(direction);
+// void recoverSpeed() {
+//   leftMotor_PID.Un = 565;
+//   rightMotor_PID.Un = 570;
 // }
-// trail module
-void trailModule()
-{
-  if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
-    //MotorControl(2,0,0);
-    while(L1==GPIO_PIN_RESET) {
-      // leftMotor_PID.targetSpeed = 0.20;
-      MotorControl(0,570,620);
-    }
-    recoverSpeed();
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
-    while(center==GPIO_PIN_RESET) {
-      // leftMotor_PID.targetSpeed = 0.25;
-      MotorControl(0,590,620);
-    }
-    recoverSpeed();
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
-    recoverSpeed();
-		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
-    while(center==GPIO_PIN_RESET) {
-      MotorControl(0,620,590);
-    }
-    recoverSpeed();
-  }
-  else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
-		while(R1==GPIO_PIN_RESET) {
-      // rightMotor_PID.targetSpeed = 0.20;
-      MotorControl(0,620,570);
-    }
-    recoverSpeed();
-  }
-  else{
-    MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  }
-}
-void recoverSpeed() {
-  leftMotor_PID.Un = 565;
-  rightMotor_PID.Un = 570;
+void trailModule() {
+  thisTrailStatus = getTrailStatus();
+	Trail_PID(0, thisTrailStatus, &trail);
+	Trail_PID_PWM = trail.PWM;
+  if(thisTrailStatus != lastTrailStatus) {
+		MotorControl(0, leftMotor_PID.PWM - Trail_PID_PWM, rightMotor_PID.PWM + Trail_PID_PWM);
+		HAL_Delay(200);
+	}
+	else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+  lastTrailStatus = thisTrailStatus;
 }
 /* USER CODE END 4 */
 

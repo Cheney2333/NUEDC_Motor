@@ -15,6 +15,7 @@
 
 #include "main.h"
 #include "motor.h"
+#include "pid.h"
 
 
 #ifdef __cplusplus
@@ -38,17 +39,8 @@ extern "C" {
 #define R1 HAL_GPIO_ReadPin(R1_Port,R1_Pin)
 #define R2 HAL_GPIO_ReadPin(R2_Port,R2_Pin)
 
-typedef enum {
-    LEFT,
-		microLEFT,
-    RIGHT,
-	  microRIGHT,
-    FORWARD
-} CarDirection;
-
 void trailModule(void);
-CarDirection GetCarDirection(void);
-// void ControlCar(CarDirection direction);
+int getTrailStatus(void);
 
 #ifdef __cplusplus
 }

@@ -1,18 +1,15 @@
 #include "trail.h"
 
 // 获取循迹模块的状态
-CarDirection GetCarDirection(void)
-{
-    if (L2 == GPIO_PIN_SET) {
-        return LEFT;
-    } else if (L1 == GPIO_PIN_SET) {
-        return microLEFT;
-    } else if (R1 == GPIO_PIN_SET) {
-        return microRIGHT;
-    } else if (R2 == GPIO_PIN_SET) {
-        return RIGHT;
-    } else {
-        return FORWARD;
-    }
+int getTrailStatus() {
+    int thisTrailStatus = 0;
+    if(L2==0 && L1==0 && center==1 && R1==0 && R2==0) thisTrailStatus = 0;  // 直行
+    else if(L2==1 && L1==1 && center==0 && R1==0 && R2==0) thisTrailStatus = -3;  // 大幅度左转
+    else if(L2==1 && L1==0 && center==0 && R1==0 && R2==0) thisTrailStatus = -2;  // 中幅度左转
+    else if(L2==0 && L1==1 && center==1 && R1==0 && R2==0) thisTrailStatus = -1;  // 左转
+    else if(L2==0 && L1==0 && center==0 && R1==1 && R2==0) thisTrailStatus = 1;   // 右转
+    else if(L2==0 && L1==0 && center==0 && R1==0 && R2==1) thisTrailStatus = 2;   // 中幅度右转
+    else if(L2==0 && L1==0 && center==0 && R1==1 && R2==1) thisTrailStatus = 3;   // 大幅度右转
+    // HW_PID_PWM = Trail_PID(0, thisTrailStatus, &p);
+    return thisTrailStatus;
 }
-

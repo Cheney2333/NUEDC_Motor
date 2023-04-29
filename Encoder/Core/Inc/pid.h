@@ -38,11 +38,28 @@ typedef struct
 	float En_2;		//上上次的误差值
 	int PWM;		//输出PWM值
 }PID_InitDefStruct;
+
+typedef struct
+{
+	//相关速度PID参数
+	float Kp;
+	float Ki;
+	float Kd;
+	float Ur;		//限幅值
+
+  	int EN;         //PID使能
+	float Un;	    //期望输出值
+	float En_1;		//上一次的误差值
+	float En_2;		//上上次的误差值
+	int PWM;		//输出PWM值
+}PID_Trail;
 /* USER CODE END Private defines */
 
 /* USER CODE BEGIN Prototypes */
 void PID_Init(PID_InitDefStruct* p); //PID值初始化
+void PID_Trail_Init(PID_Trail* p); //PID值初始化
 void Velocity_PID(float targetVelocity,float currentVelocity,PID_InitDefStruct* p); //计算PID速度
+void Trail_PID(int targetHW,int currentHW,PID_Trail* p); //计算根据红外状态所需调整的PID速度
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
