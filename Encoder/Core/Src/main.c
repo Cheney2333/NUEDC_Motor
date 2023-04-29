@@ -215,7 +215,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     c_leftSpeed = CalActualSpeed(encoderPulse[1]);   // calculate current speed
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
     //printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
-    printf("%.2f,%.2f\n\r", c_leftSpeed, c_rightSpeed);
+    printf("%.2f,%.2f,%.3f,%.3f\n\r", c_leftSpeed, c_rightSpeed,(double)leftMotor_PID.PWM/1000,(double)rightMotor_PID.PWM/1000);
 		
     Velocity_PID(leftMotor_PID.targetSpeed,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
     Velocity_PID(rightMotor_PID.targetSpeed,c_rightSpeed,&rightMotor_PID);
@@ -261,14 +261,14 @@ void trailModule()
     //MotorControl(2,0,0);
     while(L1==GPIO_PIN_RESET) {
       // leftMotor_PID.targetSpeed = 0.20;
-      MotorControl(0,640,710);
+      MotorControl(0,570,620);
     }
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
     while(center==GPIO_PIN_RESET) {
       // leftMotor_PID.targetSpeed = 0.25;
-      MotorControl(0,640,680);
+      MotorControl(0,590,620);
     }
     recoverSpeed();
   }
@@ -278,25 +278,24 @@ void trailModule()
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
     while(center==GPIO_PIN_RESET) {
-      MotorControl(0,680,645);
+      MotorControl(0,620,590);
     }
     recoverSpeed();
   }
   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
 		while(R1==GPIO_PIN_RESET) {
       // rightMotor_PID.targetSpeed = 0.20;
-      MotorControl(0,705,645);
+      MotorControl(0,620,570);
     }
     recoverSpeed();
   }
   else{
-    recoverSpeed();
     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
   }
 }
 void recoverSpeed() {
-  leftMotor_PID.Un = 640;
-  rightMotor_PID.Un = 645;
+  leftMotor_PID.Un = 565;
+  rightMotor_PID.Un = 570;
 }
 /* USER CODE END 4 */
 
