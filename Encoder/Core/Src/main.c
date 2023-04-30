@@ -53,9 +53,9 @@ short encoderPulse[2]={0};
 // float targetVelocity = 0.3; // target speed
 float leftPWM, rightPWM;
 // int testPWM = 2000;
-int thisTrailStatus = 0;
-int lastTrailStatus = 0;
-int Trail_PID_PWM = 0;
+float thisTrailStatus = 0;
+float lastTrailStatus = 0;
+float Trail_PID_PWM = 0;
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
@@ -114,8 +114,8 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
-  MX_USART2_UART_Init();
   MX_TIM2_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim2);      // set 50ms interrupt
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);   // set TIM1_CH1 PWM -- right wheel
@@ -137,8 +137,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		// trailModule();
-		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+		trailModule();
+		// MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -190,7 +190,7 @@ void SystemClock_Config(void)
 int fputc(int ch, FILE *f)
 {
  uint8_t temp[1] = {ch};
- HAL_UART_Transmit(&huart2, temp, 1, 2);
+ HAL_UART_Transmit(&huart3, temp, 1, 2);
  return ch;
 }
 
@@ -216,6 +216,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   
   if(htim->Instance == TIM2)
   {
+		
     GetEncoderPulse(); 
     c_leftSpeed = CalActualSpeed(encoderPulse[1]);   // calculate current speed
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
@@ -228,7 +229,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
     
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
-    // trailModule();
+    
   }
 }
 // trail module
@@ -275,15 +276,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //   rightMotor_PID.Un = 570;
 // }
 void trailModule() {
+	lastTrailStatus = thisTrailStatus;
   thisTrailStatus = getTrailStatus();
 	Trail_PID(0, thisTrailStatus, &trail);
 	Trail_PID_PWM = trail.PWM;
-  if(thisTrailStatus != lastTrailStatus) {
-		MotorControl(0, leftMotor_PID.PWM - Trail_PID_PWM, rightMotor_PID.PWM + Trail_PID_PWM);
-		HAL_Delay(200);
+  if(thisTrailStatus != lastTrailStatus || ((thisTrailStatus==lastTrailStatus)&&center==0)) {
+		MotorControl(0, leftMotor_PID.PWM + Trail_PID_PWM, rightMotor_PID.PWM - Trail_PID_PWM);
 	}
 	else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  lastTrailStatus = thisTrailStatus;
+  
 }
 /* USER CODE END 4 */
 

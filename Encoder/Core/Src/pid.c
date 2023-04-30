@@ -7,12 +7,12 @@
 */
 void PID_Init(PID_InitDefStruct* p) //PID值初始化
 {
-	p->Kp = 50;
-	p->Ki = 0.2;
-	p->Kd = 0;
-	p->Ur = 680;
+	p->Kp = 200;
+	p->Ki = 150;
+	p->Kd = 5;
+	p->Ur = 630;
 	p->EN = 1;
-	p->Un = 500;
+	p->Un = 0;
 	p->En_1 = 0;
 	p->En_2 = 0;
 	p->PWM = 0;
@@ -21,10 +21,10 @@ void PID_Init(PID_InitDefStruct* p) //PID值初始化
 }
 
 void PID_Trail_Init(PID_Trail* p) {
-	p->Kp = -0.5;
+	p->Kp = -25;
 	p->Ki = 0;
-	p->Kd = 0.80;
-	p->Ur = 350;
+	p->Kd = 2;
+	p->Ur = 200;
 	p->EN = 1;
 	p->Un = 0;
 	p->En_1 = 0;
@@ -60,10 +60,10 @@ void Velocity_PID(float targetVelocity, float currentVelocity, PID_InitDefStruct
 	else PID_Init(p);
 }
 
-void Trail_PID(int targetHW, int currentHW, PID_Trail* p) {
+void Trail_PID(float targetHW, float currentHW, PID_Trail* p) {
 	if(p->EN == 1)
 	{
-		int En = targetHW - currentHW;//误差值                                                     
+		float En = targetHW - currentHW;	//误差值                                                     
 	
 		p->Un += p->Kp*(En - p->En_1) + p->Ki*En + p->Kd*(En - 2*p->En_1 + p->En_2); //增量式PID
 		

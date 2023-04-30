@@ -59,7 +59,7 @@ typedef struct
 void PID_Init(PID_InitDefStruct* p); //PID值初始化
 void PID_Trail_Init(PID_Trail* p); //PID值初始化
 void Velocity_PID(float targetVelocity,float currentVelocity,PID_InitDefStruct* p); //计算PID速度
-void Trail_PID(int targetHW,int currentHW,PID_Trail* p); //计算根据红外状态所需调整的PID速度
+void Trail_PID(float targetHW,float currentHW,PID_Trail* p); //计算根据红外状态所需调整的PID速度
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -40,7 +40,7 @@ extern "C" {
 #define R2 HAL_GPIO_ReadPin(R2_Port,R2_Pin)
 
 void trailModule(void);
-int getTrailStatus(void);
+float getTrailStatus(void);
 
 #ifdef __cplusplus
 }
