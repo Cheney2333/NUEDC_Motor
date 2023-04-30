@@ -56,6 +56,8 @@ float leftPWM, rightPWM;
 float thisTrailStatus = 0;
 float lastTrailStatus = 0;
 float Trail_PID_PWM = 0;
+int outRight = 0;
+int outLeft = 0;
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
@@ -117,7 +119,7 @@ int main(void)
   MX_TIM2_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Base_Start_IT(&htim2);      // set 50ms interrupt
+	HAL_TIM_Base_Start_IT(&htim2);      // set 20ms interrupt
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);   // set TIM1_CH1 PWM -- right wheel
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);   // set TIM1_CH2 PWM -- left wheel
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);   
@@ -137,7 +139,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		trailModule();
+		
 		// MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
@@ -227,64 +229,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     Velocity_PID(rightMotor_PID.targetSpeed,c_rightSpeed,&rightMotor_PID);
     // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
-    
+    trailModule();
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
     
   }
 }
-// trail module
-// void trailModule()
-// {
-//   if(L2==GPIO_PIN_SET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){   // L2
-//     //MotorControl(2,0,0);
-//     while(L1==GPIO_PIN_RESET) {
-//       // leftMotor_PID.targetSpeed = 0.20;
-//       MotorControl(0,570,620);
-//     }
-//     recoverSpeed();
-//   }
-//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_SET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // L1
-//     while(center==GPIO_PIN_RESET) {
-//       // leftMotor_PID.targetSpeed = 0.25;
-//       MotorControl(0,590,620);
-//     }
-//     recoverSpeed();
-//   }
-//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_SET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_RESET){    // center
-//     recoverSpeed();
-// 		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-//   }
-//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_SET && R2==GPIO_PIN_RESET){    // R1
-//     while(center==GPIO_PIN_RESET) {
-//       MotorControl(0,620,590);
-//     }
-//     recoverSpeed();
-//   }
-//   else if(L2==GPIO_PIN_RESET && L1==GPIO_PIN_RESET && center==GPIO_PIN_RESET && R1==GPIO_PIN_RESET && R2==GPIO_PIN_SET){    // R2
-// 		while(R1==GPIO_PIN_RESET) {
-//       // rightMotor_PID.targetSpeed = 0.20;
-//       MotorControl(0,620,570);
-//     }
-//     recoverSpeed();
-//   }
-//   else{
-//     MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-//   }
-// }
-// void recoverSpeed() {
-//   leftMotor_PID.Un = 565;
-//   rightMotor_PID.Un = 570;
-// }
+
 void trailModule() {
-	lastTrailStatus = thisTrailStatus;
   thisTrailStatus = getTrailStatus();
 	Trail_PID(0, thisTrailStatus, &trail);
 	Trail_PID_PWM = trail.PWM;
-  if(thisTrailStatus != lastTrailStatus || ((thisTrailStatus==lastTrailStatus)&&center==0)) {
-		MotorControl(0, leftMotor_PID.PWM + Trail_PID_PWM, rightMotor_PID.PWM - Trail_PID_PWM);
-	}
-	else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-  
+	outRight = rightMotor_PID.PWM - Trail_PID_PWM;
+	outLeft = leftMotor_PID.PWM + Trail_PID_PWM;
+  if(thisTrailStatus != lastTrailStatus || ((lastTrailStatus==thisTrailStatus) && center==0)) {
+		MotorControl(0, outLeft, outRight);
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+
+	} else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+	lastTrailStatus = thisTrailStatus;
 }
 /* USER CODE END 4 */
 

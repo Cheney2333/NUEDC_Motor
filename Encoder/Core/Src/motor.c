@@ -45,8 +45,9 @@ void MotorControl(char motorDirection, int leftMotorPWM, int rightMotorPWM)
     case 0:   // forward
       LeftMotor_Go();
       RightMotor_Go();
+		__HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
       __HAL_TIM_SET_COMPARE(motor_TIM, rightMotorChannel, rightMotorPWM);
-      __HAL_TIM_SET_COMPARE(motor_TIM, leftMotorChannel, leftMotorPWM);
+      
       break;
     case 1:   // backward
       LeftMotor_Back();
@@ -81,6 +82,6 @@ void MotorControl(char motorDirection, int leftMotorPWM, int rightMotorPWM)
   */
 float CalActualSpeed(int pulse)
 {
-    return (float)(0.003925 * pulse);
+    return (float)(0.0101195 * pulse);
 }
 

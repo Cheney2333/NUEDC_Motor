@@ -7,8 +7,8 @@
 */
 void PID_Init(PID_InitDefStruct* p) //PID值初始化
 {
-	p->Kp = 200;
-	p->Ki = 150;
+	p->Kp = 700;
+	p->Ki = 250;
 	p->Kd = 5;
 	p->Ur = 630;
 	p->EN = 1;
@@ -21,9 +21,9 @@ void PID_Init(PID_InitDefStruct* p) //PID值初始化
 }
 
 void PID_Trail_Init(PID_Trail* p) {
-	p->Kp = -25;
+	p->Kp = -100;
 	p->Ki = 0;
-	p->Kd = 2;
+	p->Kd = 1;
 	p->Ur = 200;
 	p->EN = 1;
 	p->Un = 0;

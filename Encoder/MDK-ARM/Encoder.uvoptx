@@ -173,12 +173,12 @@
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>thisTrailStatus</ItemText>
+          <ItemText>outRight,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>lastTrailStatus</ItemText>
+          <ItemText>outLeft,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
