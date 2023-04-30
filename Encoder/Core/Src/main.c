@@ -71,6 +71,8 @@ void SystemClock_Config(void);
 void trailModule(void);
 void recoverSpeed(void);
 void for_delay_us(uint32_t nus);
+void beepOn(void);
+void beepOff(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -140,7 +142,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		
+		beepOn();
+    HAL_Delay(1000);
+    beepOff();
+    HAL_Delay(2000);
 		// MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
@@ -243,10 +248,16 @@ void trailModule() {
 	outRight = rightMotor_PID.PWM - Trail_PID_PWM;
 	outLeft = leftMotor_PID.PWM + Trail_PID_PWM;
   if(thisTrailStatus != lastTrailStatus || ((lastTrailStatus==thisTrailStatus)&&center==0)) {
+		//  
 		MotorControl(0, outLeft, outRight);
+		// leftMotor_PID.EN = 0;
+		// rightMotor_PID.EN = 0;
+		
+		// for_delay_us(5000);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
 	} else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+
 	lastTrailStatus = thisTrailStatus;
 }
 void for_delay_us(uint32_t nus)
@@ -257,6 +268,12 @@ void for_delay_us(uint32_t nus)
     __NOP();
   }
   while (Delay --);
+}
+void beepOn() {
+  HAL_GPIO_WritePin(BEEP_GPIO_Port,BEEP_Pin,1);
+}
+void beepOff() {
+  HAL_GPIO_WritePin(BEEP_GPIO_Port,BEEP_Pin,0);
 }
 /* USER CODE END 4 */
 
