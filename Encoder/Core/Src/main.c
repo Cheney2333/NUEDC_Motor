@@ -70,6 +70,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void trailModule(void);
 void recoverSpeed(void);
+void for_delay_us(uint32_t nus);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -241,12 +242,21 @@ void trailModule() {
 	Trail_PID_PWM = trail.PWM;
 	outRight = rightMotor_PID.PWM - Trail_PID_PWM;
 	outLeft = leftMotor_PID.PWM + Trail_PID_PWM;
-  if(thisTrailStatus != lastTrailStatus || ((lastTrailStatus==thisTrailStatus) && center==0)) {
+  if(thisTrailStatus != lastTrailStatus || ((lastTrailStatus==thisTrailStatus)&&center==0)) {
 		MotorControl(0, outLeft, outRight);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
 	} else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
 	lastTrailStatus = thisTrailStatus;
+}
+void for_delay_us(uint32_t nus)
+{
+  uint32_t Delay = nus * 168/4;
+  do
+  {
+    __NOP();
+  }
+  while (Delay --);
 }
 /* USER CODE END 4 */
 

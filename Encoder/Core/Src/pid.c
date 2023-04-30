@@ -7,17 +7,17 @@
 */
 void PID_Init(PID_InitDefStruct* p) //PID值初始化
 {
-	p->Kp = 700;
-	p->Ki = 250;
-	p->Kd = 5;
+	p->Kp = 720;
+	p->Ki = 135;
+	p->Kd = 0.19;
 	p->Ur = 630;
 	p->EN = 1;
 	p->Un = 0;
 	p->En_1 = 0;
 	p->En_2 = 0;
 	p->PWM = 0;
-	p->targetSpeed = 0.15;
-	p->targetSpeed= 0.15;
+	p->targetSpeed = 0.13;
+	p->targetSpeed= 0.13;
 }
 
 void PID_Trail_Init(PID_Trail* p) {
