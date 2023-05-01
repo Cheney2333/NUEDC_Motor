@@ -4,6 +4,7 @@
 "encoder\motor.o"
 "encoder\trail.o"
 "encoder\hc_sr04.o"
+"encoder\oled.o"
 "encoder\main.o"
 "encoder\gpio.o"
 "encoder\tim.o"

@@ -24,7 +24,7 @@ void PID_Trail_Init(PID_Trail* p) {
 	p->Kp = -100;
 	p->Ki = 0;
 	p->Kd = 1;
-	p->Ur = 200;
+	p->Ur = 300;
 	p->EN = 1;
 	p->Un = 0;
 	p->En_1 = 0;
