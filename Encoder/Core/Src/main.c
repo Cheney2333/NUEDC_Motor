@@ -162,7 +162,7 @@ int main(void)
       HAL_Delay(20);
       oledFlag = 1;
     }
-    
+
     sprintf(distanceStr, "%s%.2f", string1, distance);
 
     OLED_ShowString(0, 0, (uint8_t *)distanceStr, 16, 1);
@@ -170,7 +170,7 @@ int main(void)
     OLED_Refresh();
 
     // stage1and2and3();
-		stageFour();
+    stageFour();
     // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
@@ -292,7 +292,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         } // straight
         if (countplus < 200 && countplus > 189)
           direction = 2; // stop
-				
+
         if (countplus < 300 && countplus > 199)
         {
           direction = 0;
@@ -356,73 +356,73 @@ void beepOff()
 void stage1and2and3(void)
 {
   if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 0 && stage3 == 0)
-    {
-      MotorControl(2, 0, 0);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(800);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      MotorControl(0, 620, 595);
-      HAL_Delay(700);
-      stage1 = 1;
-    }
-    else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 1 && stage2 == 0 && stage3 == 0)
-    {
-      stage2 = 1;
-      stage1 = 1;
-      MotorControl(2, 0, 0);
-      HAL_Delay(21000);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-			HAL_Delay(5000);
-			beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      MotorControl(0, 580, 590);
-      HAL_Delay(1000);
-      stage1 = 0;
-    }
-    else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0)
-    {
-      stage3 = 1;
-      MotorControl(2, 0, 0);
-      HAL_Delay(1000);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-      HAL_Delay(700);
-      beepOn();
-      HAL_Delay(500);
-      beepOff();
-    }
+  {
+    MotorControl(2, 0, 0);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(800);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    MotorControl(0, 620, 595);
+    HAL_Delay(700);
+    stage1 = 1;
+  }
+  else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 1 && stage2 == 0 && stage3 == 0)
+  {
+    stage2 = 1;
+    stage1 = 1;
+    MotorControl(2, 0, 0);
+    HAL_Delay(21000);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(5000);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    MotorControl(0, 580, 590);
+    HAL_Delay(1000);
+    stage1 = 0;
+  }
+  else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0)
+  {
+    stage3 = 1;
+    MotorControl(2, 0, 0);
+    HAL_Delay(1000);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+    HAL_Delay(700);
+    beepOn();
+    HAL_Delay(500);
+    beepOff();
+  }
 }
 void stageFour()
 {
@@ -430,7 +430,7 @@ void stageFour()
   leftMotor_PID.targetSpeed = 0.15;
   rightMotor_PID.targetSpeed = 0.11;
   HAL_Delay(200);
-  MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+  MotorControl(0, leftMotor_PID.PWM, rightMotor_PID.PWM);
   // HAL_Delay(500);
   // if ((R2==1&&R1==1&&center==1)||(L2==1&&L1==1&&center==1))
   // {
