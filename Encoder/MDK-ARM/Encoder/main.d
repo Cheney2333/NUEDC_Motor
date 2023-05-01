@@ -36,3 +36,4 @@ encoder\main.o: ../Core/Inc/pid.h
 encoder\main.o: ../Core/Inc/pid.h
 encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 encoder\main.o: ../Core/Inc/trail.h
+encoder\main.o: ../Core/Inc/HC_SR04.h

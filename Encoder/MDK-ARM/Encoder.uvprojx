@@ -409,6 +409,11 @@
               <FilePath>..\Core\Src\trail.c</FilePath>
             </File>
             <File>
+              <FileName>HC_SR04.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\HC_SR04.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>

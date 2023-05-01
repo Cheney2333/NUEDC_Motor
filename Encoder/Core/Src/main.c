@@ -28,6 +28,7 @@
 #include "pid.h"
 #include "stdio.h"
 #include "trail.h"
+#include "HC_SR04.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +59,9 @@ float lastTrailStatus = 0;
 float Trail_PID_PWM = 0;
 int outRight = 0;
 int outLeft = 0;
+float distance = 100;
+int count = 0;
+// uint8_t Usart3String[35];
 
 PID_InitDefStruct leftMotor_PID;  
 PID_InitDefStruct rightMotor_PID;
@@ -70,7 +74,6 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void trailModule(void);
 void recoverSpeed(void);
-void for_delay_us(uint32_t nus);
 void beepOn(void);
 void beepOff(void);
 /* USER CODE END PFP */
@@ -142,11 +145,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		beepOn();
-    HAL_Delay(1000);
-    beepOff();
-    HAL_Delay(2000);
-		// MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
+		// beepOn();
+    // HAL_Delay(1000);
+    // beepOff();
+    // HAL_Delay(2000);
+
+
+		MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -221,10 +226,10 @@ void GetEncoderPulse()
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   float c_leftSpeed, c_rightSpeed;
-  
+	
   if(htim->Instance == TIM2)
   {
-		
+		count++;
     GetEncoderPulse(); 
     c_leftSpeed = CalActualSpeed(encoderPulse[1]);   // calculate current speed
     c_rightSpeed = CalActualSpeed(encoderPulse[0]);
@@ -233,11 +238,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		
     Velocity_PID(leftMotor_PID.targetSpeed,c_leftSpeed,&leftMotor_PID); // calculate the PID parameters for the left motor
     Velocity_PID(rightMotor_PID.targetSpeed,c_rightSpeed,&rightMotor_PID);
+		// trailModule();
     // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
     // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor 
-    trailModule();
+    
     // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
     
+		if(count==5) {		// 每100ms计算一次
+			count = 0;
+			distance = HC_SR04_Read();
+			// printf("distance: %.2f cm\r\n", distance);	
+		}
+		
   }
 }
 
@@ -248,32 +260,17 @@ void trailModule() {
 	outRight = rightMotor_PID.PWM - Trail_PID_PWM;
 	outLeft = leftMotor_PID.PWM + Trail_PID_PWM;
   if(thisTrailStatus != lastTrailStatus || ((lastTrailStatus==thisTrailStatus)&&center==0)) {
-		//  
 		MotorControl(0, outLeft, outRight);
-		// leftMotor_PID.EN = 0;
-		// rightMotor_PID.EN = 0;
-		
-		// for_delay_us(5000);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-
 	} else MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
-
 	lastTrailStatus = thisTrailStatus;
 }
-void for_delay_us(uint32_t nus)
-{
-  uint32_t Delay = nus * 168/4;
-  do
-  {
-    __NOP();
-  }
-  while (Delay --);
-}
+
 void beepOn() {
-  HAL_GPIO_WritePin(BEEP_GPIO_Port,BEEP_Pin,1);
+  HAL_GPIO_WritePin(BEEP_GPIO_Port,BEEP_Pin,GPIO_PIN_SET);
 }
 void beepOff() {
-  HAL_GPIO_WritePin(BEEP_GPIO_Port,BEEP_Pin,0);
+  HAL_GPIO_WritePin(BEEP_GPIO_Port,BEEP_Pin,GPIO_PIN_RESET);
 }
 /* USER CODE END 4 */
 

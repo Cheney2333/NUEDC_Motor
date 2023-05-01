@@ -61,8 +61,6 @@ void Error_Handler(void);
 #define LED_GPIO_Port GPIOC
 #define BEEP_Pin GPIO_PIN_14
 #define BEEP_GPIO_Port GPIOC
-#define Trig_Pin GPIO_PIN_1
-#define Trig_GPIO_Port GPIOA
 #define IN1_Pin GPIO_PIN_6
 #define IN1_GPIO_Port GPIOA
 #define IN2_Pin GPIO_PIN_7
@@ -81,6 +79,10 @@ void Error_Handler(void);
 #define OUT4_GPIO_Port GPIOB
 #define OUT5_Pin GPIO_PIN_10
 #define OUT5_GPIO_Port GPIOA
+#define Echo_Pin GPIO_PIN_11
+#define Echo_GPIO_Port GPIOA
+#define Trig_Pin GPIO_PIN_12
+#define Trig_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
