@@ -64,6 +64,12 @@ int sign = 0;
 int signplus = 0;
 int countplus = -50;
 int direction;
+char *disStr = "distance";
+
+int stage1 = 0;
+int stage2 = 0;
+int stage3 = 0;
+
 PID_InitDefStruct leftMotor_PID;
 PID_InitDefStruct rightMotor_PID;
 PID_Trail trail;
@@ -145,15 +151,74 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		if(oledFlag == 0) {
-			OLED_Init();
-			HAL_Delay(20);
-			oledFlag = 1;
-		}
-		
+    if (oledFlag == 0)
+    {
+      OLED_Init();
+      HAL_Delay(20);
+      oledFlag = 1;
+    }
+
     OLED_ShowString(0, 0, (uint8_t *)"distance: 20cm", 16, 1);
     HAL_Delay(1);
     OLED_Refresh();
+
+    if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 0 && stage3 == 0)
+    {
+      MotorControl(2,0,0);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      HAL_Delay(1500);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      HAL_Delay(1500);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      MotorControl(0,620,610);
+      HAL_Delay(700);
+      stage1 = 1;
+    }
+    else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 1 && stage2 == 0 && stage3 == 0)
+    {
+      stage2 = 1;
+      stage1 = 1;
+      MotorControl(2,0,0);
+      HAL_Delay(13000);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      HAL_Delay(1500);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      HAL_Delay(1500);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      MotorControl(0,610,610);
+      HAL_Delay(1000);
+      stage1 = 0;
+    }
+    else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0) 
+    {
+      stage3 = 1;
+      MotorControl(2,0,0);
+      HAL_Delay(5000);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      HAL_Delay(1500);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      HAL_Delay(1500);
+      beepOn();
+      HAL_Delay(1000);
+      beepOff();
+      
+    }
 
     // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
@@ -230,89 +295,83 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   float c_leftSpeed, c_rightSpeed;
 
-  if (htim->Instance == TIM2)
+  if ((htim->Instance == TIM2))
   {
-    count++;
-    GetEncoderPulse();
-    c_leftSpeed = CalActualSpeed(encoderPulse[1]); // calculate current speed
-    c_rightSpeed = CalActualSpeed(encoderPulse[0]);
-    // printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
-    //  printf("%.2f,%.2f,%.3f,%.3f\n\r", c_leftSpeed, c_rightSpeed,(double)leftMotor_PID.PWM/1000,(double)rightMotor_PID.PWM/1000);
-
-    Velocity_PID(leftMotor_PID.targetSpeed, c_leftSpeed, &leftMotor_PID); // calculate the PID parameters for the left motor
-    Velocity_PID(rightMotor_PID.targetSpeed, c_rightSpeed, &rightMotor_PID);
-    // trailModule();
-    // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
-    // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor
-
-    // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
-    
-    if (sign == 0)
+    if ((stage1 == 1 && stage2 == 0 && stage3 == 0) || (stage1 == 0 && stage2 == 1 && stage3 == 0))
     {
-      trailModule();
-      if (distance < 35)
-      {
-        countplus = -50;
-        sign = 1;
-      }
-    }
-    if (sign == 1)
-    {
-      countplus++;
-      if (countplus < 0)
-        direction = 2; // stop
-      if (countplus < 50 && countplus >= 0)
-      {
-        direction = 0;
-        outLeft = leftMotor_PID.PWM - 150;
-        outRight = rightMotor_PID.PWM + 200;
-      } // left
-      if (countplus < 150 && countplus > 49)
-      {
-        outLeft = leftMotor_PID.PWM;
-        outRight = rightMotor_PID.PWM;
-      } // straight
-      if (countplus < 200 && countplus > 149)
-        direction = 2; // stop
-      if (countplus < 300 && countplus > 199)
-      {
-        direction = 0;
-        outLeft = leftMotor_PID.PWM + 200;
-        outRight = rightMotor_PID.PWM - 150;
-      } // right
+      count++;
+      GetEncoderPulse();
+      c_leftSpeed = CalActualSpeed(encoderPulse[1]); // calculate current speed
+      c_rightSpeed = CalActualSpeed(encoderPulse[0]);
+      // printf("leftSpeed = %.2f m/s, rightSpeed = %.2f m/s, deltaSpeed = %.2f m/s\n\r", c_leftSpeed, c_rightSpeed, c_leftSpeed-c_rightSpeed);
+      //  printf("%.2f,%.2f,%.3f,%.3f\n\r", c_leftSpeed, c_rightSpeed,(double)leftMotor_PID.PWM/1000,(double)rightMotor_PID.PWM/1000);
 
-      //			if(countplus<550&&countplus>409){
-      //		    outLeft  = leftMotor_PID.PWM;
-      //       outRight = rightMotor_PID.PWM;
-      //			}	//straight
-      //			if(countplus<600&&countplus>549){
-      //		    outLeft  = leftMotor_PID.PWM-100;
-      //       outRight = rightMotor_PID.PWM+150;
-      //			}	//left
-      if (countplus > 299)
+      Velocity_PID(leftMotor_PID.targetSpeed, c_leftSpeed, &leftMotor_PID); // calculate the PID parameters for the left motor
+      Velocity_PID(rightMotor_PID.targetSpeed, c_rightSpeed, &rightMotor_PID);
+      // trailModule();
+      // c_leftSpeed_afterPID = CalActualSpeed(encoderPulse[1]);
+      // Velocity_PID(c_leftSpeed_afterPID,c_rightSpeed,&rightMotor_PID);  // calculate the PID of the right motor based on the speed of the left motor
+
+      // printf("LeftMotor_PID.pwm_add = %.2f m/s, RightMotor_PID.pwm_add = %.2f m/s\n\r", LeftMotor_PID.pwm_add, RightMotor_PID.pwm_add);
+
+      if (sign == 0)
       {
-        outLeft = leftMotor_PID.PWM;
-        outRight = rightMotor_PID.PWM;
-      }
-      if ((countplus > 299 && R2 == 1) || signplus > 0)
-      {
-        signplus++;
-        outLeft = leftMotor_PID.PWM - 200;
-        outRight = rightMotor_PID.PWM + 250;
-        if (signplus == 100)
+        trailModule();
+        if (distance < 25)
         {
-          signplus = 0;
-          sign = 0;
+          countplus = -50;
+          sign = 1;
         }
       }
-      MotorControl(direction, outLeft, outRight);
-    }
+      if (sign == 1)
+      {
+        countplus++;
+        if (countplus < 0)
+          direction = 2; // stop
+        if (countplus < 50 && countplus >= 0)
+        {
+          direction = 0;
+          outLeft = leftMotor_PID.PWM - 150;
+          outRight = rightMotor_PID.PWM + 150;
+        } // left
+        if (countplus < 150 && countplus > 49)
+        {
+          outLeft = leftMotor_PID.PWM;
+          outRight = rightMotor_PID.PWM;
+        } // straight
+        if (countplus < 200 && countplus > 149)
+          direction = 2; // stop
+        if (countplus < 300 && countplus > 199)
+        {
+          direction = 0;
+          outLeft = leftMotor_PID.PWM + 200;
+          outRight = rightMotor_PID.PWM - 150;
+        } // right
+        if (countplus > 299&&R2==0)
+        {
+          outLeft = leftMotor_PID.PWM;
+          outRight = rightMotor_PID.PWM;
+        }
+        if ((countplus > 299 && R2 == 1) || signplus > 0)
+        {
+          signplus++;
+          outLeft = leftMotor_PID.PWM - 200;
+          outRight = rightMotor_PID.PWM + 250;
+          if (signplus == 150)
+          {
+            signplus = 0;
+            sign = 0;
+          }
+        }
+        MotorControl(direction, outLeft, outRight);
+      }
 
-    if (count > 4)
-    { // 每100ms计算一次
-      count = 0;
-      distance = HC_SR04_Read();
-      // printf("distance: %.2f cm\r\n", distance);
+      if (count > 4)
+      { // 每100ms计算一次
+        count = 0;
+        distance = HC_SR04_Read();
+        // printf("distance: %.2f cm\r\n", distance);
+      }
     }
   }
 }
