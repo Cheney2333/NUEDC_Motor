@@ -169,8 +169,8 @@ int main(void)
     HAL_Delay(1);
     OLED_Refresh();
 
-    // stage1and2and3();
-    stageFour();
+    stage1and2and3();
+    // stageFour();
     // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
@@ -248,7 +248,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
   if ((htim->Instance == TIM2))
   {
-    if ((stage1 == 1 && stage2 == 0 && stage3 == 0) || (stage1 == 0 && stage2 == 1 && stage3 == 0))
+    if ((stage1 == 1 && stage2 == 0 && stage3 == 0) || (stage1 == 0 && stage2 == 1 && stage3 == 0) || stage4 == 1)
     {
       count++;
       GetEncoderPulse();
@@ -268,7 +268,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (sign == 0 && stage4 == 0)
       {
         trailModule();
-        if (distance < 31)
+        if (distance < 35)
         {
           countplus = -50;
           sign = 1;
@@ -304,12 +304,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
           outLeft = leftMotor_PID.PWM;
           outRight = rightMotor_PID.PWM;
         }
-        if ((countplus > 299 && R1 == 1) || signplus > 0)
+        if ((countplus > 349 && R2 == 1) || signplus > 0)
         {
           signplus++;
           outLeft = leftMotor_PID.PWM - 120;
           outRight = rightMotor_PID.PWM + 140;
-          if (signplus == 150)
+          if (signplus == 100)
           {
             signplus = 0;
             sign = 0;
@@ -429,7 +429,7 @@ void stageFour()
   stage4 = 1;
   leftMotor_PID.targetSpeed = 0.15;
   rightMotor_PID.targetSpeed = 0.11;
-  HAL_Delay(200);
+  
   MotorControl(0, leftMotor_PID.PWM, rightMotor_PID.PWM);
   // HAL_Delay(500);
   // if ((R2==1&&R1==1&&center==1)||(L2==1&&L1==1&&center==1))
