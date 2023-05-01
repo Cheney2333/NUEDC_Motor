@@ -64,11 +64,13 @@ int sign = 0;
 int signplus = 0;
 int countplus = -50;
 int direction;
-char *disStr = "distance";
 
 int stage1 = 0;
 int stage2 = 0;
 int stage3 = 0;
+
+char distanceStr[20] = {0};
+char string1[11] = "distance: ";
 
 PID_InitDefStruct leftMotor_PID;
 PID_InitDefStruct rightMotor_PID;
@@ -157,14 +159,16 @@ int main(void)
       HAL_Delay(20);
       oledFlag = 1;
     }
+    
+    sprintf(distanceStr, "%s%.2f", string1, distance);
 
-    OLED_ShowString(0, 0, (uint8_t *)"distance: 20cm", 16, 1);
+    OLED_ShowString(0, 0, (uint8_t *)distanceStr, 16, 1);
     HAL_Delay(1);
     OLED_Refresh();
 
     if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 0 && stage3 == 0)
     {
-      MotorControl(2,0,0);
+      MotorControl(2, 0, 0);
       beepOn();
       HAL_Delay(1000);
       beepOff();
@@ -176,7 +180,7 @@ int main(void)
       beepOn();
       HAL_Delay(1000);
       beepOff();
-      MotorControl(0,620,610);
+      MotorControl(0, 620, 610);
       HAL_Delay(700);
       stage1 = 1;
     }
@@ -184,7 +188,7 @@ int main(void)
     {
       stage2 = 1;
       stage1 = 1;
-      MotorControl(2,0,0);
+      MotorControl(2, 0, 0);
       HAL_Delay(13000);
       beepOn();
       HAL_Delay(1000);
@@ -197,14 +201,14 @@ int main(void)
       beepOn();
       HAL_Delay(1000);
       beepOff();
-      MotorControl(0,610,610);
+      MotorControl(0, 610, 610);
       HAL_Delay(1000);
       stage1 = 0;
     }
-    else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0) 
+    else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0)
     {
       stage3 = 1;
-      MotorControl(2,0,0);
+      MotorControl(2, 0, 0);
       HAL_Delay(5000);
       beepOn();
       HAL_Delay(1000);
@@ -217,7 +221,6 @@ int main(void)
       beepOn();
       HAL_Delay(1000);
       beepOff();
-      
     }
 
     // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
@@ -347,7 +350,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
           outLeft = leftMotor_PID.PWM + 200;
           outRight = rightMotor_PID.PWM - 150;
         } // right
-        if (countplus > 299&&R2==0)
+        if (countplus > 299 && R2 == 0)
         {
           outLeft = leftMotor_PID.PWM;
           outRight = rightMotor_PID.PWM;
