@@ -268,7 +268,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (sign == 0 && stage4 == 0)
       {
         trailModule();
-        if (distance < 31)
+        if (distance < 32)
         {
           countplus = -50;
           sign = 1;
@@ -285,31 +285,31 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
           outLeft = leftMotor_PID.PWM - 180;
           outRight = rightMotor_PID.PWM + 350;
         } // left
-        if (countplus < 150 && countplus > 49)
+        if (countplus < 170 && countplus > 49)
+        {
+          outLeft = leftMotor_PID.PWM;
+          outRight = rightMotor_PID.PWM+20;
+        } // straight
+        if (countplus < 190 && countplus > 169)
+          direction = 2; // stop
+
+        if ((countplus < 300 && countplus > 189)||(countplus>449&&R2==0&&signplus<50))
+        {
+          direction = 0;
+          outLeft = leftMotor_PID.PWM + 310;
+          outRight = rightMotor_PID.PWM - 180;
+        } // right
+        if (countplus<450&&countplus > 299 && R2 == 0 && signplus == 0)
         {
           outLeft = leftMotor_PID.PWM;
           outRight = rightMotor_PID.PWM;
-        } // straight
-        if (countplus < 160 && countplus > 149)
-          direction = 2; // stop
-
-        if (countplus < 300 && countplus > 159)
-        {
-          direction = 0;
-          outLeft = leftMotor_PID.PWM + 320;
-          outRight = rightMotor_PID.PWM - 180;
-        } // right
-        if (countplus > 299 && R2 == 0 && signplus == 0)
-        {
-          outLeft = leftMotor_PID.PWM+5;
-          outRight = rightMotor_PID.PWM;
         }
-        if ((countplus > 349 && R2 == 1) || signplus > 0)
+        if ((countplus > 299 && R2 == 1) || signplus > 0)
         {
           signplus++;
           outLeft = leftMotor_PID.PWM - 120;
-          outRight = rightMotor_PID.PWM + 140;
-          if (signplus > 120)
+          outRight = rightMotor_PID.PWM + 200;
+          if (signplus > 100||center==1)
           {
             sign = 0;
           }
