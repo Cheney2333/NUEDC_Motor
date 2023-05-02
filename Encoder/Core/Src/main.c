@@ -268,7 +268,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (sign == 0 && stage4 == 0)
       {
         trailModule();
-        if (distance < 32)
+        if (distance < 33)
         {
           countplus = -50;
           sign = 1;
@@ -293,13 +293,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         if (countplus < 190 && countplus > 169)
           direction = 2; // stop
 
-        if ((countplus < 300 && countplus > 189)||(countplus>449&&R2==0&&signplus<50))
+        if ((countplus < 300 && countplus > 189)||(countplus>549&&R1==0&&signplus<50))
         {
           direction = 0;
-          outLeft = leftMotor_PID.PWM + 310;
+          outLeft = leftMotor_PID.PWM + 325;
           outRight = rightMotor_PID.PWM - 180;
+					if(R2==1)signplus++;
         } // right
-        if (countplus<450&&countplus > 299 && R2 == 0 && signplus == 0)
+        if (countplus<550&&countplus > 299 && R2 == 0 && signplus == 0)
         {
           outLeft = leftMotor_PID.PWM;
           outRight = rightMotor_PID.PWM;
