@@ -170,7 +170,7 @@ int main(void)
     OLED_Refresh();
 
     stage1and2and3();
-    // stageFour();
+    stageFour();
     // MotorControl(0,leftMotor_PID.PWM,rightMotor_PID.PWM);
     /* USER CODE END WHILE */
 
@@ -279,11 +279,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         countplus++;
         if (countplus < 0)
           direction = 2; // stop
-        if (countplus < 50 && countplus >= 0)
+        if (countplus < 50 && countplus >= -25)
         {
           direction = 0;
-          outLeft = leftMotor_PID.PWM - 200;
-          outRight = rightMotor_PID.PWM + 280;
+          outLeft = leftMotor_PID.PWM - 180;
+          outRight = rightMotor_PID.PWM + 350;
         } // left
         if (countplus < 190 && countplus > 49)
         {
@@ -299,17 +299,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
           outLeft = leftMotor_PID.PWM + 220;
           outRight = rightMotor_PID.PWM - 150;
         } // right
-        if (countplus > 299 && R2 == 0)
+        if (countplus > 299 && R2 == 0 && signplus == 0)
         {
           outLeft = leftMotor_PID.PWM;
           outRight = rightMotor_PID.PWM;
         }
-        if ((countplus > 349 && R2 == 1) || signplus > 0)
+        if ((countplus > 299 && R2 == 1) || signplus > 0)
         {
           signplus++;
           outLeft = leftMotor_PID.PWM - 120;
           outRight = rightMotor_PID.PWM + 140;
-          if (signplus == 100)
+          if (signplus > 120)
           {
             signplus = 0;
             sign = 0;
@@ -323,6 +323,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         count = 0;
         distance = HC_SR04_Read();
         // printf("distance: %.2f cm\r\n", distance);
+      }
+      if (stage4 == 1)
+      {
+        MotorControl(0, leftMotor_PID.PWM, rightMotor_PID.PWM);
       }
     }
   }
@@ -373,7 +377,7 @@ void stage1and2and3(void)
     HAL_Delay(700);
     stage1 = 1;
   }
-  else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 1 && stage2 == 0 && stage3 == 0)
+  else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 1 && stage2 == 0 && stage3 == 0 && stage4 == 0)
   {
     stage2 = 1;
     stage1 = 1;
@@ -402,11 +406,11 @@ void stage1and2and3(void)
     beepOn();
     HAL_Delay(500);
     beepOff();
-    MotorControl(0, 580, 590);
+    MotorControl(0, 580, 595);
     HAL_Delay(1000);
     stage1 = 0;
   }
-  else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0)
+  else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0 && stage4 == 0)
   {
     stage3 = 1;
     MotorControl(2, 0, 0);
@@ -422,23 +426,50 @@ void stage1and2and3(void)
     beepOn();
     HAL_Delay(500);
     beepOff();
+    stage3 = 2;
   }
 }
 void stageFour()
 {
-  stage4 = 1;
-  leftMotor_PID.targetSpeed = 0.15;
-  rightMotor_PID.targetSpeed = 0.11;
-  
-  MotorControl(0, leftMotor_PID.PWM, rightMotor_PID.PWM);
-  // HAL_Delay(500);
-  // if ((R2==1&&R1==1&&center==1)||(L2==1&&L1==1&&center==1))
-  // {
-  //   MotorControl(2,0,0);
-  //   beepOn();
-  //   HAL_Delay(200);
-  //   beepOff();
-  // }
+  if (stage1 == 0 && stage2 == 1 && stage3 == 2)
+  {
+    if (stage4 == 0)
+    {
+      
+      HAL_Delay(5000);
+			stage4 = 1;
+      leftMotor_PID.targetSpeed = 0.14;
+      rightMotor_PID.targetSpeed = 0.11;
+      MotorControl(0, leftMotor_PID.PWM + 50, rightMotor_PID.PWM - 50);
+			HAL_Delay(1000);
+    }
+    
+    if ((R2 == 1 || R1 == 1 || center == 1 || L2 == 1 || L1 == 1) && stage4 == 1)
+    {
+			
+			stage4 = 2;
+      HAL_Delay(2000);
+      leftMotor_PID.PWM = 0;
+      rightMotor_PID.PWM = 0;
+      MotorControl(2, 0, 0);
+      HAL_Delay(50);
+      beepOn();
+      HAL_Delay(200);
+      beepOff();
+      HAL_Delay(500);
+      beepOn();
+      HAL_Delay(200);
+      beepOff();
+      HAL_Delay(500);
+      beepOn();
+      HAL_Delay(200);
+      beepOff();
+    }
+		else if (stage4 == 1)
+		{
+			trailModule();
+		}
+  }
 }
 /* USER CODE END 4 */
 
