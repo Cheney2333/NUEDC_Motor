@@ -268,7 +268,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (sign == 0 && stage4 == 0)
       {
         trailModule();
-        if (distance < 35)
+        if (distance < 31)
         {
           countplus = -50;
           sign = 1;
@@ -279,39 +279,38 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         countplus++;
         if (countplus < 0)
           direction = 2; // stop
-        if (countplus < 50 && countplus >= -25)
+        if (countplus < 50 && countplus >= -20)
         {
           direction = 0;
           outLeft = leftMotor_PID.PWM - 180;
           outRight = rightMotor_PID.PWM + 350;
         } // left
-        if (countplus < 190 && countplus > 49)
+        if (countplus < 150 && countplus > 49)
         {
           outLeft = leftMotor_PID.PWM;
           outRight = rightMotor_PID.PWM;
         } // straight
-        if (countplus < 200 && countplus > 189)
+        if (countplus < 160 && countplus > 149)
           direction = 2; // stop
 
-        if (countplus < 300 && countplus > 199)
+        if (countplus < 300 && countplus > 159)
         {
           direction = 0;
-          outLeft = leftMotor_PID.PWM + 220;
-          outRight = rightMotor_PID.PWM - 150;
+          outLeft = leftMotor_PID.PWM + 320;
+          outRight = rightMotor_PID.PWM - 180;
         } // right
         if (countplus > 299 && R2 == 0 && signplus == 0)
         {
-          outLeft = leftMotor_PID.PWM;
+          outLeft = leftMotor_PID.PWM+5;
           outRight = rightMotor_PID.PWM;
         }
-        if ((countplus > 299 && R2 == 1) || signplus > 0)
+        if ((countplus > 349 && R2 == 1) || signplus > 0)
         {
           signplus++;
           outLeft = leftMotor_PID.PWM - 120;
           outRight = rightMotor_PID.PWM + 140;
           if (signplus > 120)
           {
-            signplus = 0;
             sign = 0;
           }
         }
@@ -439,7 +438,7 @@ void stageFour()
       HAL_Delay(5000);
 			stage4 = 1;
       leftMotor_PID.targetSpeed = 0.14;
-      rightMotor_PID.targetSpeed = 0.11;
+      rightMotor_PID.targetSpeed = 0.105;
       MotorControl(0, leftMotor_PID.PWM + 50, rightMotor_PID.PWM - 50);
 			HAL_Delay(1000);
     }
@@ -448,7 +447,7 @@ void stageFour()
     {
 			
 			stage4 = 2;
-      HAL_Delay(2000);
+      HAL_Delay(1500);
       leftMotor_PID.PWM = 0;
       rightMotor_PID.PWM = 0;
       MotorControl(2, 0, 0);
