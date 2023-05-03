@@ -6,14 +6,14 @@ encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ha
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Include/core_cm3.h
-encoder\stm32f1xx_hal_tim_ex.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+encoder\stm32f1xx_hal_tim_ex.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Include/cmsis_version.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-encoder\stm32f1xx_hal_tim_ex.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+encoder\stm32f1xx_hal_tim_ex.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h
 encoder\stm32f1xx_hal_tim_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h

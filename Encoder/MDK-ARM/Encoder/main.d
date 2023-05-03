@@ -7,14 +7,14 @@ encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
 encoder\main.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 encoder\main.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 encoder\main.o: ../Drivers/CMSIS/Include/core_cm3.h
-encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+encoder\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 encoder\main.o: ../Drivers/CMSIS/Include/cmsis_version.h
 encoder\main.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 encoder\main.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 encoder\main.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h
 encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+encoder\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h
 encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h
 encoder\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h
@@ -34,8 +34,8 @@ encoder\main.o: ../Core/Inc/gpio.h
 encoder\main.o: ../Core/Inc/motor.h
 encoder\main.o: ../Core/Inc/pid.h
 encoder\main.o: ../Core/Inc/pid.h
-encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+encoder\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 encoder\main.o: ../Core/Inc/trail.h
 encoder\main.o: ../Core/Inc/HC_SR04.h
 encoder\main.o: ../Core/Inc/oled.h
-encoder\main.o: D:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+encoder\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
