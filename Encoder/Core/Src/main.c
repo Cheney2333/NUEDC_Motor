@@ -224,12 +224,7 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 // printf redirect
-int fputc(int ch, FILE *f)
-{
-  uint8_t temp[1] = {ch};
-  HAL_UART_Transmit(&huart3, temp, 1, 2);
-  return ch;
-}
+
 
 // Encoder speed measurement -------------------------------------------------------------
 /**
@@ -368,7 +363,7 @@ void stage1and2and3(void)
 {
   if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1) || (L1 == 1 && center == 1 && R1 == 1)) && stage1 == 0 && stage2 == 0 && stage3 == 0)
   {
-    MotorControl(2, 0, 0);
+    MotorControl(2, 0, 0);		// 起始线到暂停点1
     beepOn();
     HAL_Delay(500);
     beepOff();
@@ -386,10 +381,10 @@ void stage1and2and3(void)
   }
   else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1)) && stage1 == 1 && stage2 == 0 && stage3 == 0 && stage4 == 0)
   {
-    stage2 = 1;
+    stage2 = 1;			// 暂停点1到避障前
     stage1 = 1;
     MotorControl(2, 0, 0);
-    HAL_Delay(21000);
+    HAL_Delay(21000);		// 暂停点1等待30s
     beepOn();
     HAL_Delay(500);
     beepOff();
@@ -419,7 +414,7 @@ void stage1and2and3(void)
   }
   else if (((L2 == 1 && L1 == 1 && center == 1) || (R2 == 1 && R1 == 1 && center == 1) || (L1 == 1 && center == 1 && R1 == 1)) && stage1 == 0 && stage2 == 1 && stage3 == 0 && stage4 == 0)
   {
-    stage3 = 1;
+    stage3 = 1;									// 避障后到暂停点2
     MotorControl(2, 0, 0);
     HAL_Delay(500);
     beepOn();
@@ -436,7 +431,7 @@ void stage1and2and3(void)
     stage3 = 2;
   }
 }
-void stageFour()
+void stageFour()				// 暂停点2到暂停点3
 {
   if (stage1 == 0 && stage2 == 1 && stage3 == 2)
   {
@@ -476,7 +471,7 @@ void stageFour()
 		}
   }
 }
-void stageFive(void) 
+void stageFive(void) 				// 暂停点3回到起始线
 {
 	if (stage1 == 0 && stage2 == 1 && stage3 == 2 && stage5 == 1 && flag == 0 && stage4 == 2)
 	{
